@@ -1,0 +1,36 @@
+{
+  "name": "pccomponentes/open-api-messaging-context",
+  "description": "Behat context for validating messages with OpenApi schema",
+  "authors": [
+    {
+      "name": "Aarón Bernabeu Rodríguez",
+      "email": "aaron.bernabeu@pccomponentes.com"
+    }
+  ],
+  "license": "MIT",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Pccomponentes\\OpenApiMessagingContext\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pccomponentes\\OpenApiMessagingContext\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^7.2",
+    "pccomponentes/amqp": "^1.0",
+    "symfony/yaml": "4.2.*",
+    "symfony/messenger": "4.2.*",
+    "justinrainbow/json-schema": "^5.2",
+    "behat/behat": "^3.5"
+  },
+  "require-dev": {
+    "pccomponentes/ganchudo": "^1.0",
+    "phpunit/phpunit": "^7.3",
+    "squizlabs/php_codesniffer": "^3.3",
+    "symfony/var-dumper": "^4.2"
+  }
+}

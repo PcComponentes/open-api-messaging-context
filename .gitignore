@@ -1,0 +1,22 @@
+###> vendor ###
+/vendor/
+composer.lock
+composer.phar
+###< vendor ###
+
+###> IDEA ###
+/.idea
+###< IDEA ###
+###> phpunit ###
+.phpunit
+/phpunit.xml
+###< phpunit ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
+
+###> ganchudo ###
+ganchudo.yml
+###< ganchudo ###
