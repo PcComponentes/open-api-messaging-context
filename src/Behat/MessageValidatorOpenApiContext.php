@@ -11,10 +11,12 @@ use Symfony\Component\Yaml\Yaml;
 final class MessageValidatorOpenApiContext implements Context
 {
     private $spyMiddleware;
+    private $rootPath;
 
-    public function __construct(SpyMiddleware $spyMiddleware)
+    public function __construct(string $rootPath, SpyMiddleware $spyMiddleware)
     {
         $this->spyMiddleware = $spyMiddleware;
+        $this->rootPath = $rootPath;
     }
 
     /**
@@ -32,7 +34,7 @@ final class MessageValidatorOpenApiContext implements Context
      */
     public function theJsonShouldBeValidAccordingToTheSwaggerSchema($name, $dumpPath)
     {
-        $path = realpath(__DIR__ . '/../../../../' . $dumpPath);
+        $path = realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
         $eventJson = $this->spyMiddleware->getMessage($name);
@@ -40,7 +42,7 @@ final class MessageValidatorOpenApiContext implements Context
         $allSpec = Yaml::parse(file_get_contents($path));
         $schema = (new OpenApiParser($allSpec))->parse($name);
 
-        $this->validate($eventJson, new JsonSchema(json_decode(json_encode($schema))));
+        $this->validate($eventJson, new JsonSchema(\json_decode(\json_encode($schema))));
     }
 
     private function checkSchemaFile($filename)

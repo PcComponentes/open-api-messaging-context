@@ -19,6 +19,10 @@ final class OpenApiParser
             $topicName = \preg_replace('/^' . $baseTopic . '/', '' , $topicName);
         }
 
+        if (false === \array_key_exists($topicName, $this->originalContent['topics'])) {
+            throw new \Exception(\sprintf('Topic with name <%s> not found', $topicName));
+        }
+
         $topic = $this->originalContent['topics'][$topicName]['publish'];
 
         return $this->extractData($topic);

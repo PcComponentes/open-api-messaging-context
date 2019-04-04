@@ -20,6 +20,7 @@
     }
   },
   "require": {
+    "ext-json": "*",
     "php": "^7.2",
     "pccomponentes/amqp": "^1.0",
     "symfony/yaml": "4.2.*",

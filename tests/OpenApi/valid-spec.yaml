@@ -1,0 +1,38 @@
+asyncapi: "1.2.0"
+info:
+  title: Test specification
+  version: "1.0.0"
+  description: |
+    Spec for testing purpose
+baseTopic: 'pccomponentes.test.'
+
+topics:
+  testtopic:
+    publish:
+      $ref: "#/components/messages/TestTopicRef"
+
+
+components:
+  messages:
+    TestTopicRef:
+      data:
+        type: object
+        required:
+          - message_id
+          - type
+        properties:
+          message_id:
+            type: string
+          type:
+            type: string
+          attributes:
+            $ref: "#/components/schemas/test_schema"
+
+  schemas:
+    test_schema:
+      type: object
+      required:
+        - some_attribute
+      properties:
+        some_attribute:
+          type: string
