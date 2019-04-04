@@ -55,6 +55,6 @@ final class OpenApiParser
             return (null === $last) ? $this->originalContent[$elem] : $last[$elem];
         });
 
-        return $this->extractData($foundDef);
+        return $this->extractData(\array_key_exists('data', $foundDef) ? $foundDef['data'] : $foundDef);
     }
 }

@@ -13,7 +13,7 @@ final class OpenApiParserTest extends TestCase
     {
         $allSpec = Yaml::parse(file_get_contents(__DIR__ . '/valid-spec.yaml'));
         $schema = (new OpenApiParser($allSpec))->parse('pccomponentes.test.testtopic');
-        $jsonCompleted = '{"data":{"type":"object","required":["message_id","type"],"properties":{"message_id":{"type":"string"},"type":{"type":"string"},"attributes":{"type":"object","required":["some_attribute"],"properties":{"some_attribute":{"type":"string"}}}}}}';
+        $jsonCompleted = '{"type":"object","required":["message_id","type"],"properties":{"message_id":{"type":"string"},"type":{"type":"string"},"attributes":{"type":"object","required":["some_attribute"],"properties":{"some_attribute":{"type":"string"}}}}}';
         $this->assertJsonStringEqualsJsonString(\json_encode($schema), $jsonCompleted);
     }
 
