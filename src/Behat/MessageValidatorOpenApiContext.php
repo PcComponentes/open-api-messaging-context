@@ -28,8 +28,6 @@ final class MessageValidatorOpenApiContext implements Context
     }
 
     /**
-     * Checks, that response JSON matches with a swagger dump
-     *
      * @Then the published message :name should be valid according to swagger :dumpPath
      */
     public function theJsonShouldBeValidAccordingToTheSwaggerSchema($name, $dumpPath)
