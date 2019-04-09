@@ -4,7 +4,7 @@ info:
   version: "1.0.0"
   description: |
     Spec for testing purpose
-baseTopic: 'pccomponentes.test.'
+baseTopic: 'pccomponentes.test'
 
 topics:
   testtopic:
@@ -15,7 +15,7 @@ topics:
 components:
   messages:
     TestTopicRef:
-      data:
+      payload:
         type: object
         required:
           - message_id

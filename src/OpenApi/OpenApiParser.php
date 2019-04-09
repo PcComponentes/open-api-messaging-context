@@ -16,7 +16,7 @@ final class OpenApiParser
         $topicName = $name;
         $baseTopic = \array_key_exists('baseTopic', $this->originalContent) ? $this->originalContent['baseTopic'] : '';
         if ('' !== $baseTopic) {
-            $topicName = \preg_replace('/^' . $baseTopic . '/', '' , $topicName);
+            $topicName = \preg_replace('/^' . $baseTopic . '\./', '' , $topicName);
         }
 
         if (false === \array_key_exists($topicName, $this->originalContent['topics'])) {
@@ -55,6 +55,6 @@ final class OpenApiParser
             return (null === $last) ? $this->originalContent[$elem] : $last[$elem];
         });
 
-        return $this->extractData(\array_key_exists('data', $foundDef) ? $foundDef['data'] : $foundDef);
+        return $this->extractData(\array_key_exists('payload', $foundDef) ? $foundDef['payload'] : $foundDef);
     }
 }
