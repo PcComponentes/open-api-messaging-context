@@ -49,3 +49,6 @@ And use the `Then` statement for validate messages:
     """
     Then the published message "pccomponentes.example.1.domain_event.resource.resource_created" should be valid according to swagger "docs/openapi/offer-messages.yml"
 ```
+
+Your schema must be writen according to https://www.asyncapi.com/ specification.
+See an [example](tests/OpenApi/valid-spec.yaml).
