@@ -30,7 +30,7 @@ final class MessageValidatorOpenApiContext implements Context
     /**
      * @Then the published message :name should be valid according to swagger :dumpPath
      */
-    public function theJsonShouldBeValidAccordingToTheSwaggerSchema($name, $dumpPath)
+    public function theMessageShouldBeValidAccordingToTheSwagger($name, $dumpPath)
     {
         $path = realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
@@ -41,6 +41,16 @@ final class MessageValidatorOpenApiContext implements Context
         $schema = (new OpenApiParser($allSpec))->parse($name);
 
         $this->validate($eventJson, new JsonSchema(\json_decode(\json_encode($schema))));
+    }
+
+    /**
+     * @Then the message :name should be dispatched
+     */
+    public function theMessageShouldBeDispatched(string $name)
+    {
+        if (false === $this->spyMiddleware->hasMessage($name)) {
+            throw new \Exception(sprintf('Message %s not dispatched', $name));
+        }
     }
 
     private function checkSchemaFile($filename)

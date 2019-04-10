@@ -28,11 +28,16 @@ final class SpyMiddleware implements MiddlewareInterface
 
     public function getMessage(string $name)
     {
-        if (\array_key_exists($name, self::$messages)) {
+        if ($this->hasMessage($name)) {
             return self::$messages[$name];
         }
 
-        throw new \Exception('Message ' . $name . ' not triggered');
+        throw new \Exception('Message ' . $name . ' not dispatched');
+    }
+
+    public function hasMessage(string $name): bool
+    {
+        return \array_key_exists($name, self::$messages);
     }
 
     public function reset()
