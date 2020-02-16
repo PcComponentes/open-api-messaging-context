@@ -10,13 +10,13 @@ final class JsonSchema
     private $schema;
     private $uri;
 
-    public function __construct(\stdClass $schema, string $uri = null)
+    public function __construct($schema, string $uri = null)
     {
         $this->schema = $schema;
         $this->uri = $uri;
     }
 
-    public function resolve(SchemaStorage $resolver)
+    public function resolve(SchemaStorage $resolver): JsonSchema
     {
         if (!$this->hasUri()) {
             return $this;
@@ -27,7 +27,7 @@ final class JsonSchema
         return $this;
     }
 
-    public function validate(\stdClass $json, Validator $validator)
+    public function validate($json, Validator $validator): bool
     {
         $validator->check($json, $this->schema);
 
@@ -47,7 +47,7 @@ final class JsonSchema
         return $this->schema;
     }
 
-    private function hasUri()
+    private function hasUri(): bool
     {
         return null !== $this->uri;
     }

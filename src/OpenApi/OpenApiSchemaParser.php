@@ -20,6 +20,26 @@ final class OpenApiSchemaParser
         return $this->extractData($schemaSpec);
     }
 
+    public function fromResponse(string $path, string $method, int $statusCode, string $contentType): array
+    {
+        $rootPaths = $this->originalContent['paths'];
+        $this->assertPathRoot($path, $rootPaths);
+        $pathRoot = $rootPaths[$path];
+
+        $this->assertMethodRoot($path, $method, $pathRoot);
+        $methodRoot = $pathRoot[$method];
+
+        $this->assertStatusCodeRoot($path, $method, $statusCode, $methodRoot);
+        $statusCodeRoot = $methodRoot['responses'][$statusCode];
+
+        if (false === \array_key_exists('content', $statusCodeRoot)) {
+            return [];
+        }
+
+        $this->assertContentTypeRoot($path, $method, $statusCode, $contentType, $statusCodeRoot);
+        return $this->extractData($statusCodeRoot['content'][$contentType]['schema']);
+    }
+
     private function extractData(array $data): array
     {
         $aux = [];
@@ -48,5 +68,51 @@ final class OpenApiSchemaParser
         });
 
         return $this->extractData(\array_key_exists('payload', $foundDef) ? $foundDef['payload'] : $foundDef);
+    }
+
+    private function assertPathRoot(string $path, $rootPaths): void
+    {
+        if (false === \array_key_exists($path, $rootPaths)) {
+            throw new \InvalidArgumentException(\sprintf('%s path not found', $path));
+        }
+    }
+
+    private function assertMethodRoot(string $path, string $method, $pathRoot): void
+    {
+        if (false === \array_key_exists($method, $pathRoot)) {
+            throw new \InvalidArgumentException(\sprintf('%s method not found on %s', $method, $path));
+        }
+    }
+
+    private function assertStatusCodeRoot(string $path, string $method, int $statusCode, $methodRoot): void
+    {
+        if (false === \array_key_exists('responses', $methodRoot) || false === \array_key_exists(
+                $statusCode,
+                $methodRoot['responses']
+            )) {
+            throw new \InvalidArgumentException(
+                \sprintf('%s response not found on %s path with %s method', $statusCode, $path, $method)
+            );
+        }
+    }
+
+    private function assertContentTypeRoot(
+        string $path,
+        string $method,
+        int $statusCode,
+        string $contentType,
+        $statusCodeRoot
+    ): void {
+        if (false === \array_key_exists($contentType, $statusCodeRoot['content'])) {
+            throw new \InvalidArgumentException(
+                \sprintf(
+                    '%s content-type not found on %s path with %s method with %s statusCode',
+                    $contentType,
+                    $path,
+                    $method,
+                    $statusCode
+                )
+            );
+        }
     }
 }
