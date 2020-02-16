@@ -5,7 +5,7 @@ namespace Pccomponentes\OpenApiMessagingContext\Behat;
 use Behat\Behat\Context\Context;
 use Pccomponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
 use Pccomponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
-use Pccomponentes\OpenApiMessagingContext\OpenApi\OpenApiParser;
+use Pccomponentes\OpenApiMessagingContext\OpenApi\AsyncApiParser;
 use Symfony\Component\Yaml\Yaml;
 
 final class MessageValidatorOpenApiContext implements Context
@@ -22,7 +22,7 @@ final class MessageValidatorOpenApiContext implements Context
     /**
      * @BeforeScenario
      */
-    public function bootstrapEnvironment()
+    public function bootstrapEnvironment(): void
     {
         $this->spyMiddleware->reset();
     }
@@ -30,7 +30,7 @@ final class MessageValidatorOpenApiContext implements Context
     /**
      * @Then the published message :name should be valid according to swagger :dumpPath
      */
-    public function theMessageShouldBeValidAccordingToTheSwagger($name, $dumpPath)
+    public function theMessageShouldBeValidAccordingToTheSwagger($name, $dumpPath): void
     {
         $path = realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
@@ -38,22 +38,22 @@ final class MessageValidatorOpenApiContext implements Context
         $eventJson = $this->spyMiddleware->getMessage($name);
 
         $allSpec = Yaml::parse(file_get_contents($path));
-        $schema = (new OpenApiParser($allSpec))->parse($name);
+        $schema = (new AsyncApiParser($allSpec))->parse($name);
 
-        $this->validate($eventJson, new JsonSchema(\json_decode(\json_encode($schema))));
+        $this->validate($eventJson, new JsonSchema(\json_decode(\json_encode($schema), false)));
     }
 
     /**
      * @Then the message :name should be dispatched
      */
-    public function theMessageShouldBeDispatched(string $name)
+    public function theMessageShouldBeDispatched(string $name): void
     {
         if (false === $this->spyMiddleware->hasMessage($name)) {
             throw new \Exception(sprintf('Message %s not dispatched', $name));
         }
     }
 
-    private function checkSchemaFile($filename)
+    private function checkSchemaFile($filename): void
     {
         if (false === is_file($filename)) {
             throw new \RuntimeException(
@@ -62,13 +62,13 @@ final class MessageValidatorOpenApiContext implements Context
         }
     }
 
-    private function validate(string $json, JsonSchema $schema)
+    private function validate(string $json, JsonSchema $schema): bool
     {
         $validator = new \JsonSchema\Validator();
 
         $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever, new \JsonSchema\Uri\UriResolver);
         $schema->resolve($resolver);
 
-        return $schema->validate(\json_decode($json), $validator);
+        return $schema->validate(\json_decode($json, false), $validator);
     }
 }

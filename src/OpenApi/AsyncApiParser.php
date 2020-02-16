@@ -2,7 +2,7 @@
 
 namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
 
-final class OpenApiParser
+final class AsyncApiParser
 {
     private $originalContent;
 
