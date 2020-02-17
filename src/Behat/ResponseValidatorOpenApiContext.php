@@ -45,14 +45,13 @@ final class ResponseValidatorOpenApiContext implements Context
     }
 
     /**
-     * @Then the response should be valid according to OpenApi :dumpPath
+     * @Then the response should be valid according to OpenApi :dumpPath with path :openApiPath
      */
-    public function theResponseShouldBeValidAccordingToOpenApi($dumpPath): void
+    public function theResponseShouldBeValidAccordingToOpenApiWithPath(string $dumpPath, string $openApiPath): void
     {
         $path = realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
-        $currentPath = $this->extractCurrentPath();
         $statusCode = $this->extractStatusCode();
         $method = $this->extractMethod();
         $contentType = $this->extractContentType();
@@ -60,7 +59,7 @@ final class ResponseValidatorOpenApiContext implements Context
         $responseJson = $this->minkContext->getSession()->getPage()->getContent();
 
         $allSpec = Yaml::parse(file_get_contents($path));
-        $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($currentPath, $method, $statusCode, $contentType);
+        $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($openApiPath, $method, $statusCode, $contentType);
 
         $this->validate($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
     }
@@ -91,12 +90,6 @@ final class ResponseValidatorOpenApiContext implements Context
         $method = $requestClient->getHistory()->current()->getMethod();
 
         return strtolower($method);
-    }
-
-    private function extractCurrentPath(): string
-    {
-        $currentUrl = $this->minkContext->getSession()->getCurrentUrl();
-        return parse_url($currentUrl)['path'];
     }
 
     private function extractStatusCode(): int
