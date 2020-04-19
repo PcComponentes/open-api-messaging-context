@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<ruleset name="Project rules">
+    <file>src</file>
+    <rule ref="vendor/pccomponentes/coding-standard/PccomponentesCodingStandard/ruleset.xml">
+        <exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment.OneLinePropertyComment" />
+    </rule>
+</ruleset>

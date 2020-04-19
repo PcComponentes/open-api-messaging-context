@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
 
@@ -64,7 +65,7 @@ final class OpenApiSchemaParser
         $cleanDef = \preg_replace('/^\#\//', '', $def);
         $explodedDef = \explode('/', $cleanDef);
         $foundDef = \array_reduce($explodedDef, function ($last, $elem) {
-            return (null === $last) ? $this->originalContent[$elem] : $last[$elem];
+            return null === $last ? $this->originalContent[$elem] : $last[$elem];
         });
 
         return $this->extractData(\array_key_exists('payload', $foundDef) ? $foundDef['payload'] : $foundDef);
@@ -87,9 +88,9 @@ final class OpenApiSchemaParser
     private function assertStatusCodeRoot(string $path, string $method, int $statusCode, $methodRoot): void
     {
         if (false === \array_key_exists('responses', $methodRoot) || false === \array_key_exists(
-                $statusCode,
-                $methodRoot['responses']
-            )) {
+            $statusCode,
+            $methodRoot['responses']
+        )) {
             throw new \InvalidArgumentException(
                 \sprintf('%s response not found on %s path with %s method', $statusCode, $path, $method)
             );
