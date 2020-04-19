@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Behat;
 
@@ -66,7 +67,7 @@ final class MessageValidatorOpenApiContext implements Context
     {
         $validator = new \JsonSchema\Validator();
 
-        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever, new \JsonSchema\Uri\UriResolver);
+        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
         $schema->resolve($resolver);
 
         return $schema->validate(\json_decode($json, false), $validator);

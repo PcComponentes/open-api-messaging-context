@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Behat;
 
@@ -7,7 +8,6 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\MinkContext;
 use Pccomponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
 use Pccomponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Yaml\Yaml;
 
 final class ResponseValidatorOpenApiContext implements Context

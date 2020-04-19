@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
 
@@ -10,7 +11,7 @@ final class JsonSchema
     private $schema;
     private $uri;
 
-    public function __construct($schema, string $uri = null)
+    public function __construct($schema, ?string $uri = null)
     {
         $this->schema = $schema;
         $this->uri = $uri;
@@ -32,9 +33,9 @@ final class JsonSchema
         $validator->check($json, $this->schema);
 
         if (!$validator->isValid()) {
-            $msg = "JSON does not validate. Violations:".PHP_EOL;
+            $msg = "JSON does not validate. Violations:".\PHP_EOL;
             foreach ($validator->getErrors() as $error) {
-                $msg .= sprintf("  - [%s] %s".PHP_EOL, $error['property'], $error['message']);
+                $msg .= sprintf("  - [%s] %s".\PHP_EOL, $error['property'], $error['message']);
             }
             throw new \Exception($msg);
         }

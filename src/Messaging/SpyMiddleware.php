@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Messaging;
 
 use Pccomponentes\Ddd\Util\Message\AggregateMessage;
-use Pccomponentes\Ddd\Util\Message\Message;
 use Pccomponentes\Ddd\Util\Message\MessageVisitor;
 use Pccomponentes\Ddd\Util\Message\SimpleMessage;
 use Pccomponentes\OpenApiMessagingContext\Serialization\SchemaValidatorAggregateMessageSerializable;
