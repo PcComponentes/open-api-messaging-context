@@ -5,7 +5,7 @@ namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
 
 final class OpenApiSchemaParser
 {
-    private $originalContent;
+    private array $originalContent;
 
     public function __construct(array $originalContent)
     {

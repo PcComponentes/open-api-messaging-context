@@ -21,7 +21,7 @@
   },
   "require": {
     "ext-json": "*",
-    "php": "^7.3",
+    "php": "^7.4",
     "symfony/yaml": "^4.0",
     "symfony/messenger": "^4.0",
     "justinrainbow/json-schema": "^5.2",
@@ -30,12 +30,12 @@
     "behat/mink-browserkit-driver": "^1.3",
     "behat/symfony2-extension": "^2.1",
     "behat/mink-extension": "^2.3",
-    "pccomponentes/ddd": "^1.2",
+    "pccomponentes/ddd": "^2.0",
     "beberlei/assert": "^3.2"
   },
   "require-dev": {
     "pccomponentes/ganchudo": "^1.0",
-    "phpunit/phpunit": "^7.3",
+    "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^4.0",
     "pccomponentes/coding-standard": "^1.0"
   }

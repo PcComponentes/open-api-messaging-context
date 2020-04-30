@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 final class AsyncApiParserTest extends TestCase
 {
     /** @test */
-    public function given_valid_schema_when_parse_then_get_parsed_schema()
+    public function given_valid_schema_when_parse_then_get_parsed_schema(): void
     {
         $allSpec = Yaml::parse(file_get_contents(__DIR__ . '/valid-asyncapi-spec.yaml'));
         $schema = (new AsyncApiParser($allSpec))->parse('pccomponentes.test.testtopic');
@@ -18,7 +18,7 @@ final class AsyncApiParserTest extends TestCase
     }
 
     /** @test */
-    public function given_valid_schema_when_parse_non_existent_topic_then_exception()
+    public function given_valid_schema_when_parse_non_existent_topic_then_exception(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Topic with name <non.existent.topic> not found');

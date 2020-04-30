@@ -12,9 +12,8 @@ use Symfony\Component\Yaml\Yaml;
 
 final class ResponseValidatorOpenApiContext implements Context
 {
-    /** @var MinkContext */
-    private $minkContext;
-    private $rootPath;
+    private MinkContext $minkContext;
+    private string $rootPath;
 
     public function __construct(string $rootPath)
     {

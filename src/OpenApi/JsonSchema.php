@@ -9,7 +9,7 @@ use JsonSchema\Validator;
 final class JsonSchema
 {
     private $schema;
-    private $uri;
+    private ?string $uri;
 
     public function __construct($schema, ?string $uri = null)
     {
