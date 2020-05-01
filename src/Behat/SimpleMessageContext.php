@@ -6,8 +6,8 @@ namespace Pccomponentes\OpenApiMessagingContext\Behat;
 use Assert\Assert;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
-use Pccomponentes\Ddd\Util\Message\Serialization\JsonApi\SimpleMessageStream;
-use Pccomponentes\Ddd\Util\Message\Serialization\SimpleMessageUnserializable;
+use PcComponentes\Ddd\Util\Message\Serialization\JsonApi\SimpleMessageStream;
+use PcComponentes\Ddd\Util\Message\Serialization\SimpleMessageUnserializable;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class SimpleMessageContext implements Context

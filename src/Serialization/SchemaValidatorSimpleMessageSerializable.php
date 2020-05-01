@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Serialization;
 
-use Pccomponentes\Ddd\Util\Message\Serialization\SimpleMessageSerializable;
-use Pccomponentes\Ddd\Util\Message\SimpleMessage;
+use PcComponentes\Ddd\Util\Message\Serialization\SimpleMessageSerializable;
+use PcComponentes\Ddd\Util\Message\SimpleMessage;
 
 final class SchemaValidatorSimpleMessageSerializable implements SimpleMessageSerializable
 {

@@ -11,13 +11,13 @@ use Symfony\Component\Yaml\Yaml;
 
 final class MessageValidatorOpenApiContext implements Context
 {
-    private $spyMiddleware;
-    private $rootPath;
+    private string $rootPath;
+    private SpyMiddleware $spyMiddleware;
 
     public function __construct(string $rootPath, SpyMiddleware $spyMiddleware)
     {
-        $this->spyMiddleware = $spyMiddleware;
         $this->rootPath = $rootPath;
+        $this->spyMiddleware = $spyMiddleware;
     }
 
     /**

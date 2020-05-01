@@ -6,14 +6,14 @@ namespace Pccomponentes\OpenApiMessagingContext\Behat;
 use Assert\Assert;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
-use Pccomponentes\Ddd\Util\Message\Serialization\AggregateMessageUnserializable;
-use Pccomponentes\Ddd\Util\Message\Serialization\JsonApi\AggregateMessageStream;
+use PcComponentes\Ddd\Util\Message\Serialization\AggregateMessageUnserializable;
+use PcComponentes\Ddd\Util\Message\Serialization\JsonApi\AggregateMessageStream;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class AggregateMessageContext implements Context
 {
-    private $bus;
-    private $aggregateMessageUnserializable;
+    private MessageBusInterface $bus;
+    private AggregateMessageUnserializable $aggregateMessageUnserializable;
 
     public function __construct(
         MessageBusInterface $bus,

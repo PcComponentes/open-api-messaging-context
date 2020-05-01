@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Serialization;
 
-use Pccomponentes\Ddd\Util\Message\AggregateMessage;
-use Pccomponentes\Ddd\Util\Message\Serialization\AggregateMessageSerializable;
+use PcComponentes\Ddd\Util\Message\AggregateMessage;
+use PcComponentes\Ddd\Util\Message\Serialization\AggregateMessageSerializable;
 
 final class SchemaValidatorAggregateMessageSerializable implements AggregateMessageSerializable
 {

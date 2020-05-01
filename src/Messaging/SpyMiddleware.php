@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Pccomponentes\OpenApiMessagingContext\Messaging;
 
-use Pccomponentes\Ddd\Util\Message\AggregateMessage;
-use Pccomponentes\Ddd\Util\Message\MessageVisitor;
-use Pccomponentes\Ddd\Util\Message\SimpleMessage;
+use PcComponentes\Ddd\Util\Message\AggregateMessage;
+use PcComponentes\Ddd\Util\Message\MessageVisitor;
+use PcComponentes\Ddd\Util\Message\SimpleMessage;
 use Pccomponentes\OpenApiMessagingContext\Serialization\SchemaValidatorAggregateMessageSerializable;
 use Pccomponentes\OpenApiMessagingContext\Serialization\SchemaValidatorSimpleMessageSerializable;
 use Symfony\Component\Messenger\Envelope;
