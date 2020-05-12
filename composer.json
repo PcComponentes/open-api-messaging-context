@@ -22,8 +22,8 @@
   "require": {
     "ext-json": "*",
     "php": "^7.4",
-    "symfony/yaml": "^4.0",
-    "symfony/messenger": "^4.0",
+    "symfony/yaml": "^4.4|^5.0",
+    "symfony/messenger": "^4.4|^5.0",
     "justinrainbow/json-schema": "^5.2",
     "behat/behat": "^3.5",
     "behat/mink": "@dev",
@@ -36,7 +36,7 @@
   "require-dev": {
     "pccomponentes/ganchudo": "^1.0",
     "phpunit/phpunit": "^9.0",
-    "symfony/var-dumper": "^4.0",
+    "symfony/var-dumper": "^4.4|^5.0",
     "pccomponentes/coding-standard": "^1.0"
   }
 }
