@@ -38,5 +38,5 @@
     "friends-of-behat/mink": "^1.8",
     "friends-of-behat/mink-extension": "^2.4",
     "friends-of-behat/mink-browserkit-driver": "^1.4"
-  },
+  }
 }
