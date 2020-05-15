@@ -12,7 +12,8 @@ final class AsyncApiParser
     {
         $this->originalContent = $originalContent;
         $this->versionExtractor = [
-            '1.2' => new V12ChannelExtractor()
+            '1.2' => new V12ChannelExtractor(),
+            '2.0' => new V20ChannelExtractor(),
         ];
     }
 

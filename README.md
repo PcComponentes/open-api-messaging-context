@@ -56,7 +56,8 @@ And use the `Then` statement for validate messages:
 ```
 
 Your schema must be writen according to https://www.asyncapi.com/ specification.
-See an [example](tests/OpenApi/valid-spec.yaml).
+
+Available for version schemas `1.2.0` and `2.0.0`.
 
 # Available contexts
 
