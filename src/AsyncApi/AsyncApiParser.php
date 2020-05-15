@@ -1,32 +1,43 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
+namespace Pccomponentes\OpenApiMessagingContext\AsyncApi;
 
 final class AsyncApiParser
 {
-    private $originalContent;
+    private array $originalContent;
+    private array $versionExtractor;
 
     public function __construct(array $originalContent)
     {
         $this->originalContent = $originalContent;
+        $this->versionExtractor = [
+            '1.2' => new V12ChannelExtractor()
+        ];
     }
 
     public function parse($name): array
     {
-        $topicName = $name;
-        $baseTopic = \array_key_exists('baseTopic', $this->originalContent) ? $this->originalContent['baseTopic'] : '';
-        if ('' !== $baseTopic) {
-            $topicName = \preg_replace('/^' . $baseTopic . '\./', '', $topicName);
+        $channelExtractor = $this->extractVersion();
+
+        return $this->extractData($channelExtractor->extract($this->originalContent, $name));
+    }
+
+    private function extractVersion(): ChannelExtractor
+    {
+        if (false === array_key_exists('asyncapi', $this->originalContent)) {
+            throw new \RuntimeException('Unable to find asyncapi document version');
         }
 
-        if (false === \array_key_exists($topicName, $this->originalContent['topics'])) {
-            throw new \Exception(\sprintf('Topic with name <%s> not found', $topicName));
+        if (1 === preg_match('/^1\.2/', $this->originalContent['asyncapi'])) {
+            return $this->versionExtractor['1.2'];
         }
 
-        $topic = $this->originalContent['topics'][$topicName]['publish'];
+        if (1 === preg_match('/^2\.0/', $this->originalContent['asyncapi'])) {
+            return $this->versionExtractor['2.0'];
+        }
 
-        return $this->extractData($topic);
+        throw new \InvalidArgumentException(\sprintf('%s async api version not supported', $this->originalContent['asyncapi']));
     }
 
     private function extractData(array $data): array
