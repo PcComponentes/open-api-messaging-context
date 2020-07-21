@@ -11,12 +11,12 @@
   "type": "library",
   "autoload": {
     "psr-4": {
-      "Pccomponentes\\OpenApiMessagingContext\\": "src/"
+      "PcComponentes\\OpenApiMessagingContext\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Pccomponentes\\OpenApiMessagingContext\\Tests\\": "tests/"
+      "PcComponentes\\OpenApiMessagingContext\\Tests\\": "tests/"
     }
   },
   "require": {

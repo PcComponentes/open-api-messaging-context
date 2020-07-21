@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
+namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
 final class OpenApiSchemaParser
 {
@@ -45,7 +45,7 @@ final class OpenApiSchemaParser
     {
         $aux = [];
         foreach ($data as $key => $elem) {
-            if ($key === '$ref') {
+            if ('$ref' === $key) {
                 $aux = $this->findDefinition($elem);
                 continue;
             }

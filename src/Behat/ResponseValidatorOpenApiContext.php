@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Behat;
+namespace PcComponentes\OpenApiMessagingContext\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\MinkContext;
-use Pccomponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
-use Pccomponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
+use PcComponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
 use Symfony\Component\Yaml\Yaml;
 
 final class ResponseValidatorOpenApiContext implements Context
@@ -48,7 +48,7 @@ final class ResponseValidatorOpenApiContext implements Context
      */
     public function theResponseShouldBeValidAccordingToOpenApiWithPath(string $dumpPath, string $openApiPath): void
     {
-        $path = realpath($this->rootPath . '/' . $dumpPath);
+        $path = \realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
         $statusCode = $this->extractStatusCode();
@@ -57,7 +57,7 @@ final class ResponseValidatorOpenApiContext implements Context
 
         $responseJson = $this->minkContext->getSession()->getPage()->getContent();
 
-        $allSpec = Yaml::parse(file_get_contents($path));
+        $allSpec = Yaml::parse(\file_get_contents($path));
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($openApiPath, $method, $statusCode, $contentType);
 
         $this->validate($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
@@ -65,7 +65,7 @@ final class ResponseValidatorOpenApiContext implements Context
 
     private function checkSchemaFile($filename): void
     {
-        if (false === is_file($filename)) {
+        if (false === \is_file($filename)) {
             throw new \RuntimeException(
                 'The JSON schema doesn\'t exist'
             );
@@ -88,7 +88,7 @@ final class ResponseValidatorOpenApiContext implements Context
         $requestClient = $this->minkContext->getSession()->getDriver()->getClient();
         $method = $requestClient->getHistory()->current()->getMethod();
 
-        return strtolower($method);
+        return \strtolower($method);
     }
 
     private function extractStatusCode(): int

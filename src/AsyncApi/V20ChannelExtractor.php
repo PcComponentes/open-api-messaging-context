@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\AsyncApi;
+namespace PcComponentes\OpenApiMessagingContext\AsyncApi;
 
 final class V20ChannelExtractor implements ChannelExtractor
 {

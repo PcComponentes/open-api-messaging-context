@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\AsyncApi;
+namespace PcComponentes\OpenApiMessagingContext\AsyncApi;
 
 final class AsyncApiParser
 {
@@ -26,15 +26,15 @@ final class AsyncApiParser
 
     private function extractVersion(): ChannelExtractor
     {
-        if (false === array_key_exists('asyncapi', $this->originalContent)) {
+        if (false === \array_key_exists('asyncapi', $this->originalContent)) {
             throw new \RuntimeException('Unable to find asyncapi document version');
         }
 
-        if (1 === preg_match('/^1\.2/', $this->originalContent['asyncapi'])) {
+        if (1 === \preg_match('/^1\.2/', $this->originalContent['asyncapi'])) {
             return $this->versionExtractor['1.2'];
         }
 
-        if (1 === preg_match('/^2\.0/', $this->originalContent['asyncapi'])) {
+        if (1 === \preg_match('/^2\.0/', $this->originalContent['asyncapi'])) {
             return $this->versionExtractor['2.0'];
         }
 

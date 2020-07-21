@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Behat;
+namespace PcComponentes\OpenApiMessagingContext\Behat;
 
 use Behat\Behat\Context\Context;
-use Pccomponentes\OpenApiMessagingContext\AsyncApi\AsyncApiParser;
-use Pccomponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
-use Pccomponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
+use PcComponentes\OpenApiMessagingContext\AsyncApi\AsyncApiParser;
+use PcComponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
 use Symfony\Component\Yaml\Yaml;
 
 final class MessageValidatorOpenApiContext implements Context

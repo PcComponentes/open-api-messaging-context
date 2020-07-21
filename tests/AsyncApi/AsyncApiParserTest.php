@@ -1,8 +1,8 @@
 <?php
 
-namespace Pccomponentes\OpenApiMessagingContext\Tests\AsyncApi;
+namespace PcComponentes\OpenApiMessagingContext\Tests\AsyncApi;
 
-use Pccomponentes\OpenApiMessagingContext\AsyncApi\AsyncApiParser;
+use PcComponentes\OpenApiMessagingContext\AsyncApi\AsyncApiParser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 

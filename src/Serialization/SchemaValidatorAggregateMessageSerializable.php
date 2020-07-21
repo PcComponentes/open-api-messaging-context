@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Serialization;
+namespace PcComponentes\OpenApiMessagingContext\Serialization;
 
 use PcComponentes\Ddd\Util\Message\AggregateMessage;
 use PcComponentes\Ddd\Util\Message\Serialization\AggregateMessageSerializable;
