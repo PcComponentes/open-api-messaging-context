@@ -1,22 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Messaging;
+namespace PcComponentes\OpenApiMessagingContext\Messaging;
 
 use PcComponentes\Ddd\Util\Message\AggregateMessage;
+use PcComponentes\Ddd\Util\Message\Message;
 use PcComponentes\Ddd\Util\Message\MessageVisitor;
 use PcComponentes\Ddd\Util\Message\SimpleMessage;
-use Pccomponentes\OpenApiMessagingContext\Serialization\SchemaValidatorAggregateMessageSerializable;
-use Pccomponentes\OpenApiMessagingContext\Serialization\SchemaValidatorSimpleMessageSerializable;
+use PcComponentes\OpenApiMessagingContext\Serialization\SchemaValidatorAggregateMessageSerializable;
+use PcComponentes\OpenApiMessagingContext\Serialization\SchemaValidatorSimpleMessageSerializable;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;
 
 final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 {
-    private static $messages;
-    private $simpleMessageSerializable;
-    private $aggregateMessageSerializable;
+    private static array $messages;
+    private SchemaValidatorSimpleMessageSerializable $simpleMessageSerializable;
+    private SchemaValidatorAggregateMessageSerializable $aggregateMessageSerializable;
 
     public function __construct()
     {

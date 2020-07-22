@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Behat;
+namespace PcComponentes\OpenApiMessagingContext\Behat;
 
 use Assert\Assert;
 use Behat\Behat\Context\Context;

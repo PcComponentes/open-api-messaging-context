@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\OpenApi;
+namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
 use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;

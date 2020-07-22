@@ -5,6 +5,10 @@ Little context in behat for validate published messages and http responses accor
 composer require --dev pccomponentes/open-api-messaging-context
 ```
 
+# Configuration
+
+This package uses [Friends Of Behat Symfony Extension](https://github.com/FriendsOfBehat/SymfonyExtension), you must see how to configure your behat with this extension.
+
 # How to use
 
 Define SpyMiddleware as a service in your test environment:
@@ -12,7 +16,7 @@ Define SpyMiddleware as a service in your test environment:
 ```yaml
 services:
   spy.message.middleware:
-    class: Pccomponentes\OpenApiMessagingContext\Messaging\SpyMiddleware
+    class: PcComponentes\OpenApiMessagingContext\Messaging\SpyMiddleware
 ```
 
 Add SpyMiddleware as a middleware in `messenger.yaml` configuration in `test` environment.
@@ -36,7 +40,7 @@ default:
   suites:
     default:
       contexts:
-        - Pccomponentes\OpenApiMessagingContext\Behat\MessageValidatorOpenApiContext:
+        - PcComponentes\OpenApiMessagingContext\Behat\MessageValidatorOpenApiContext:
           - '%%kernel.project_dir%%'
           - '@spy.message.middleware'
 ```
@@ -56,7 +60,8 @@ And use the `Then` statement for validate messages:
 ```
 
 Your schema must be writen according to https://www.asyncapi.com/ specification.
-See an [example](tests/OpenApi/valid-spec.yaml).
+
+Available for version schemas `1.2.0` and `2.0.0`.
 
 # Available contexts
 
@@ -71,7 +76,7 @@ Then the message "pccomponentes.example.1.domain_event.resource.resource_created
 ```
 Configuration:
 ```yaml
-- Pccomponentes\OpenApiMessagingContext\Behat\MessageValidatorOpenApiContext:
+- PcComponentes\OpenApiMessagingContext\Behat\MessageValidatorOpenApiContext:
   - '%%kernel.project_dir%%'
   - '@spy.message.middleware'
 ```
@@ -83,7 +88,7 @@ Then the response should be valid according to OpenApi "docs/openapi.yml" with p
 ```
 Configuration:
 ```yaml
-- Pccomponentes\OpenApiMessagingContext\Behat\ResponseValidatorOpenApiContext:
+- PcComponentes\OpenApiMessagingContext\Behat\ResponseValidatorOpenApiContext:
   - '%%kernel.project_dir%%'
 ```
 
@@ -109,7 +114,7 @@ This is useful to combine it with `Then` step in `MessageValidatorOpenApiContext
 
 Configuration:
 ```yaml
-- Pccomponentes\OpenApiMessagingContext\Behat\SimpleMessageContext:
+- PcComponentes\OpenApiMessagingContext\Behat\SimpleMessageContext:
   - '@messenger.bus.command' ##Your command bus with spy.message.middleware
   - '@your.simple_message_deserializer.service'
 ```
@@ -138,7 +143,7 @@ This is useful to combine it with `Then` step in `MessageValidatorOpenApiContext
 
 Configuration:
 ```yaml
-- Pccomponentes\OpenApiMessagingContext\Behat\AggregateMessageContext:
+- PcComponentes\OpenApiMessagingContext\Behat\AggregateMessageContext:
   - '@messenger.bus.events' ## Your event bus with spy.message.middleware
   - '@your.aggregate_message_deserializer.service'
 ```

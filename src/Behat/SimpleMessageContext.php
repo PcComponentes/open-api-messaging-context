@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Behat;
+namespace PcComponentes\OpenApiMessagingContext\Behat;
 
 use Assert\Assert;
 use Behat\Behat\Context\Context;
@@ -12,8 +12,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class SimpleMessageContext implements Context
 {
-    private $bus;
-    private $simpleMessageUnserializable;
+    private MessageBusInterface $bus;
+    private SimpleMessageUnserializable $simpleMessageUnserializable;
 
     public function __construct(
         MessageBusInterface $bus,

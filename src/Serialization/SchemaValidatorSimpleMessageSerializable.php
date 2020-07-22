@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pccomponentes\OpenApiMessagingContext\Serialization;
+namespace PcComponentes\OpenApiMessagingContext\Serialization;
 
 use PcComponentes\Ddd\Util\Message\Serialization\SimpleMessageSerializable;
 use PcComponentes\Ddd\Util\Message\SimpleMessage;
