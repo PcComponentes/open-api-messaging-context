@@ -12,6 +12,9 @@ use Symfony\Component\Yaml\Yaml;
 
 final class ResponseValidatorOpenApiContext implements Context
 {
+    private const CONTENT_TYPE_RESPONSE_HEADER_KEY = 'content-type';
+    private const HTTP_NO_CONTENT_CODE = 204;
+
     private MinkContext $minkContext;
     private string $rootPath;
 
@@ -19,6 +22,7 @@ final class ResponseValidatorOpenApiContext implements Context
     {
         $this->rootPath = $rootPath;
     }
+
     /**
      * @BeforeScenario
      */
@@ -98,6 +102,18 @@ final class ResponseValidatorOpenApiContext implements Context
 
     private function extractContentType(): string
     {
-        return $this->minkContext->getSession()->getResponseHeader('content-type');
+        if (self::HTTP_NO_CONTENT_CODE === $this->extractStatusCode()) {
+            return '';
+        }
+
+        $contentType = $this->minkContext->getSession()->getResponseHeader(self::CONTENT_TYPE_RESPONSE_HEADER_KEY);
+
+        if (null === $contentType) {
+            throw new \RuntimeException(
+                'HTTP content-type response header key not defined'
+            );
+        }
+
+        return $contentType;
     }
 }
