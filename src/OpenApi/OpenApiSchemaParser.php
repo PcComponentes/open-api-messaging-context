@@ -44,6 +44,11 @@ final class OpenApiSchemaParser
     private function extractData(array $data): array
     {
         $aux = [];
+
+        if (\array_key_exists('nullable', $data)) {
+            $data = $this->convertNullableTypeToJsonSchema($data);
+        }
+
         foreach ($data as $key => $elem) {
             if ('$ref' === $key) {
                 $aux = $this->findDefinition($elem);
@@ -115,5 +120,21 @@ final class OpenApiSchemaParser
                 )
             );
         }
+    }
+
+    private function convertNullableTypeToJsonSchema(array $data): array
+    {
+        $data['oneOf'] = [
+            ['type' => null],
+        ];
+
+        if (\array_key_exists('type', $data)) {
+            $data['oneOf'][] = ['type' => $data['type']];
+            unset($data['type']);
+        }
+
+        unset($data['nullable']);
+
+        return $data;
     }
 }
