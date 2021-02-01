@@ -9,6 +9,7 @@ composer.phar
 ###< IDEA ###
 ###> phpunit ###
 .phpunit
+.phpunit.result.cache
 /phpunit.xml
 ###< phpunit ###
 
