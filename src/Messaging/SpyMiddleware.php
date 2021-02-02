@@ -15,7 +15,7 @@ use Symfony\Component\Messenger\Middleware\StackInterface;
 
 final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 {
-    private static array $messages;
+    private static array $messages = [];
     private SchemaValidatorSimpleMessageSerializable $simpleMessageSerializable;
     private SchemaValidatorAggregateMessageSerializable $aggregateMessageSerializable;
 
@@ -36,10 +36,19 @@ final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 
     private function save($key, $data): void
     {
-        self::$messages[$key] = $data;
+        self::$messages[$key][] = $data;
     }
 
     public function getMessage(string $name)
+    {
+        if ($this->hasMessage($name)) {
+            return self::$messages[$name][0];
+        }
+
+        throw new \Exception('Message ' . $name . ' not dispatched');
+    }
+
+    public function getMessagesFromName(string $name): array
     {
         if ($this->hasMessage($name)) {
             return self::$messages[$name];
@@ -50,7 +59,12 @@ final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 
     public function hasMessage(string $name): bool
     {
-        return \array_key_exists($name, self::$messages);
+        return true === \array_key_exists($name, self::$messages) && \count(self::$messages[$name]) > 0;
+    }
+
+    public function countMessagesFromName(string $name): int
+    {
+        return $this->hasMessage($name) ? \count(self::$messages[$name]) : 0;
     }
 
     public function reset(): void

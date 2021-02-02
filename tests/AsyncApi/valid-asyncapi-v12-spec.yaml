@@ -7,7 +7,7 @@ info:
 baseTopic: 'pccomponentes.test'
 
 topics:
-  testtopic:
+  1.domain_event.test_context.test_name:
     publish:
       $ref: "#/components/messages/TestTopicRef"
 

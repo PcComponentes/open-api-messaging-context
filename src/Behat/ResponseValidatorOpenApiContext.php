@@ -7,6 +7,9 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\MinkContext;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationCollection;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use PcComponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
 use Symfony\Component\Yaml\Yaml;
 
@@ -44,7 +47,12 @@ final class ResponseValidatorOpenApiContext implements Context
         $allSpec = Yaml::parse(file_get_contents($path));
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->parse($schema);
 
-        $this->validate($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
+        $validator = new JsonValidator($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
+        $validation = $validator->validate();
+
+        if ($validation->hasError()) {
+            throw new JsonValidationException($validation->errorMessage());
+        }
     }
 
     /**
@@ -64,7 +72,12 @@ final class ResponseValidatorOpenApiContext implements Context
         $allSpec = Yaml::parse(\file_get_contents($path));
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($openApiPath, $method, $statusCode, $contentType);
 
-        $this->validate($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
+        $validator = new JsonValidator($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
+        $validation = $validator->validate();
+
+        if ($validation->hasError()) {
+            throw new JsonValidationException($validation->errorMessage());
+        }
     }
 
     private function checkSchemaFile($filename): void
@@ -74,16 +87,6 @@ final class ResponseValidatorOpenApiContext implements Context
                 'The JSON schema doesn\'t exist'
             );
         }
-    }
-
-    private function validate(string $json, JsonSchema $schema): bool
-    {
-        $validator = new \JsonSchema\Validator();
-
-        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
-        $schema->resolve($resolver);
-
-        return $schema->validate(\json_decode($json, false), $validator);
     }
 
     private function extractMethod(): string
