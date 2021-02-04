@@ -9,47 +9,25 @@ use JsonSchema\Validator;
 final class JsonSchema
 {
     private $schema;
-    private ?string $uri;
 
-    public function __construct($schema, ?string $uri = null)
+    public function __construct($schema)
     {
         $this->schema = $schema;
-        $this->uri = $uri;
     }
 
-    public function resolve(SchemaStorage $resolver): JsonSchema
+    public function validate(string $json, Validator $validator): JsonValidation
     {
-        if (!$this->hasUri()) {
-            return $this;
-        }
+        $validator->check(\json_decode($json), $this->schema);
 
-        $this->schema = $resolver->resolveRef($this->uri);
-
-        return $this;
-    }
-
-    public function validate($json, Validator $validator): bool
-    {
-        $validator->check($json, $this->schema);
+        $msg = null;
 
         if (!$validator->isValid()) {
-            $msg = "JSON does not validate. Violations:".\PHP_EOL;
+            $msg = 'Violations:'.\PHP_EOL;
             foreach ($validator->getErrors() as $error) {
                 $msg .= sprintf("  - [%s] %s".\PHP_EOL, $error['property'], $error['message']);
             }
-            throw new \Exception($msg);
         }
 
-        return true;
-    }
-
-    public function schema(): string
-    {
-        return $this->schema;
-    }
-
-    private function hasUri(): bool
-    {
-        return null !== $this->uri;
+        return new JsonValidation($json, $msg);
     }
 }

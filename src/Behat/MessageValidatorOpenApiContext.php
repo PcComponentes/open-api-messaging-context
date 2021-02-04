@@ -7,6 +7,9 @@ use Behat\Behat\Context\Context;
 use PcComponentes\OpenApiMessagingContext\AsyncApi\AsyncApiParser;
 use PcComponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationCollection;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
+use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use Symfony\Component\Yaml\Yaml;
 
 final class MessageValidatorOpenApiContext implements Context
@@ -36,12 +39,22 @@ final class MessageValidatorOpenApiContext implements Context
         $path = realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
-        $eventJson = $this->spyMiddleware->getMessage($name);
+        $jsonMessages = $this->spyMiddleware->getMessagesFromName($name);
 
         $allSpec = Yaml::parse(file_get_contents($path));
         $schema = (new AsyncApiParser($allSpec))->parse($name);
 
-        $this->validate($eventJson, new JsonSchema(\json_decode(\json_encode($schema), false)));
+        $validations = [];
+
+        foreach ($jsonMessages as $theJsonMessage) {
+            $validator = new JsonValidator($theJsonMessage, new JsonSchema(\json_decode(\json_encode($schema), false)));
+            $validations[] = $validator->validate();
+        }
+
+        $jsonValidation = new JsonValidationCollection(...$validations);
+        if ($jsonValidation->hasAnyError()) {
+            throw new JsonValidationException($jsonValidation->buildErrorMessage());
+        }
     }
 
     /**
@@ -50,7 +63,25 @@ final class MessageValidatorOpenApiContext implements Context
     public function theMessageShouldBeDispatched(string $name): void
     {
         if (false === $this->spyMiddleware->hasMessage($name)) {
-            throw new \Exception(sprintf('Message %s not dispatched', $name));
+            throw new \Exception(sprintf('Message %s was expected to dispatch, actually not dispatched', $name));
+        }
+    }
+
+    /**
+     * @Then the message :name should be dispatched :times times
+     */
+    public function theMessageShouldBeDispatchedManyTimes(string $name, int $times): void
+    {
+        $countMessages = $this->spyMiddleware->countMessagesFromName($name);
+        if ($times !== $countMessages) {
+            throw new \Exception(
+                sprintf(
+                    'Message %s was expected to dispatch %d times, actually dispatched %d times.',
+                    $name,
+                    $times,
+                    $countMessages
+                ),
+            );
         }
     }
 
@@ -61,15 +92,5 @@ final class MessageValidatorOpenApiContext implements Context
                 'The JSON schema doesn\'t exist'
             );
         }
-    }
-
-    private function validate(string $json, JsonSchema $schema): bool
-    {
-        $validator = new \JsonSchema\Validator();
-
-        $resolver = new \JsonSchema\SchemaStorage(new \JsonSchema\Uri\UriRetriever(), new \JsonSchema\Uri\UriResolver());
-        $schema->resolve($resolver);
-
-        return $schema->validate(\json_decode($json, false), $validator);
     }
 }

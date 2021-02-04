@@ -6,7 +6,7 @@ info:
     Spec for testing purpose
 
 channels:
-  pccomponentes.test.testtopic:
+  pccomponentes.test.1.domain_event.test_context.test_name:
     publish:
       message:
         $ref: "#/components/messages/TestTopicRef"
