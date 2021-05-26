@@ -41,6 +41,24 @@ final class OpenApiSchemaParser
         return $this->extractData($statusCodeRoot['content'][$contentType]['schema']);
     }
 
+    public function fromRequest(string $path, string $method, string $contentType): array
+    {
+        $rootPaths = $this->originalContent['paths'];
+        $this->assertPathRoot($path, $rootPaths);
+        $pathRoot = $rootPaths[$path];
+
+        $this->assertMethodRoot($path, $method, $pathRoot);
+        $methodRoot = $pathRoot[$method];
+
+        if (false === \array_key_exists('requestBody', $methodRoot)) {
+            return [];
+        }
+
+        $requestBodyRoot = $methodRoot['requestBody'];
+
+        return $this->extractData($requestBodyRoot['content'][$contentType]['schema']);
+    }
+
     private function extractData(array $data): array
     {
         $aux = [];

@@ -1,0 +1,52 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: OpenAPI
+
+paths:
+  /url/endpoint:
+    post:
+      summary: summary
+      operationId: operantionId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/url_endpoint_request_body'
+
+      responses:
+        '200':
+          description: description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/url_endpoint_response_ok_body'
+        '500':
+          description: description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/url_endpoint_response_error_body'
+components:
+  schemas:
+    url_endpoint_request_body:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    url_endpoint_response_ok_body:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    url_endpoint_response_error_body:
+      type: object
+      properties:
+        error:
+          type: string
