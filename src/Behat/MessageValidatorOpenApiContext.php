@@ -91,7 +91,7 @@ final class MessageValidatorOpenApiContext implements Context
     public function theMessageShouldNotBeDispatched(string $name): void
     {
         if (true === $this->spyMiddleware->hasMessage($name)) {
-            throw new \Exception(sprintf('Message %s was expected not to dispatch, actually dispatched', $name));
+            throw new \Exception(sprintf('Message %s was not expected to be dispatched', $name));
         }
     }
 
