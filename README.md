@@ -148,3 +148,17 @@ Configuration:
   - '@your.aggregate_message_deserializer.service'
 ```
 *TIP* If you are using [pccomponentes/messenger-bundle](https://github.com/PcComponentes/messenger-bundle) you can use `@pccom.messenger_bundle.aggregate_message.serializer.stream_deserializer` for deserializer service
+
+## RequestValidatorOpenApiContext
+Check if JSON body request are documented in your openapi file before doing the API call:
+```gherkin
+When I send a :method request to :url and JSON request should be valid according to OpenApi "/your/openapi/path/"
+{
+    // your json data goes here (optional)
+}
+```
+Configuration:
+```yaml
+- PcComponentes\OpenApiMessagingContext\Behat\RequestValidatorOpenApiContext:
+  - '%kernel.project_dir%'
+```
