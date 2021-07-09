@@ -81,16 +81,13 @@ final class RequestValidatorOpenApiContext implements Context
         }
     }
 
-    private function validateUrlParameters($allSpec, string $url, string $method): void
+    private function validateUrlParameters(array $allSpec, string $url, string $method): void
     {
         $parser = new UrlParameterSchemaParser($allSpec);
         $schema = $parser->parse($url, $method);
 
-        $urlValidator  = new JsonValidator(
-            \json_encode($schema->parameters()),
-            new JsonSchema($schema->schema()),
-        );
-
+        $jsonSchema = new JsonSchema($schema->schema());
+        $urlValidator  = new JsonValidator(\json_encode($schema->parameters()), $jsonSchema);
         $validation = $urlValidator->validate();
 
         if (true === $validation->hasError()) {

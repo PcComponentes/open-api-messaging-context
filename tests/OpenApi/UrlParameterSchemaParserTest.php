@@ -5,28 +5,17 @@ namespace PcComponentes\OpenApiMessagingContext\Tests\OpenApi;
 
 use PcComponentes\OpenApiMessagingContext\OpenApi\UrlParameterSchemaParser;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
 final class UrlParameterSchemaParserTest extends TestCase
 {
-    /** @test */
-    public function given_valid_schema_when_parse_v3_get_request_then_ensure_is_parsed(): void
+    /**
+     * @test
+     * @dataProvider cases
+     */
+    public function tests(array $spec, string $url, string $method, array $expectedSchema): void
     {
-        $path = '/url/endpoint/1';
-        $method = 'get';
-
-        $schemaParser = new UrlParameterSchemaParser($this->allSpec());
-        $actualSchema = $schemaParser->parse($path, $method);
-
-        $expectedSchema = [
-            'type' => 'object',
-            'properties' => [
-                'id' => [
-                    'type' => 'string',
-                    'required' => true,
-                ],
-            ],
-        ];
+        $schemaParser = new UrlParameterSchemaParser($spec);
+        $actualSchema = $schemaParser->parse($url, $method);
 
         $this->assertEquals(
             $expectedSchema,
@@ -34,37 +23,85 @@ final class UrlParameterSchemaParserTest extends TestCase
         );
     }
 
-    /** @test */
-    public function given_valid_schema_when_parse_v3_multiple_url_parameters_then_ensure_is_parsed(): void
+    public function cases(): iterable
     {
-        $path = '/url/endpoint/1/resource/10';
-        $method = 'post';
-
-        $schemaParser = new UrlParameterSchemaParser($this->allSpec());
-        $actualSchema = $schemaParser->parse($path, $method);
-
-        $expectedSchema = [
-            'type' => 'object',
-            'properties' => [
-                'id' => [
-                    'type' => 'string',
-                    'required' => true,
+        yield 'validate schema with one parameter in path' => [
+            [
+                'paths' => [
+                    '/url/resource/{resource_id}' => [
+                        'get' => [
+                            'parameters' => [
+                                [
+                                    'name' => 'resource_id',
+                                    'in' => 'path',
+                                    'description' => 'resource id',
+                                    'schema' => [
+                                        'type' => 'string',
+                                        'required' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
-                'resource_id' => [
-                    'type' => 'string',
-                    'required' => true,
+            ],
+            '/url/resource/1',
+            'get',
+            [
+                'type' => 'object',
+                'properties' => [
+                    'resource_id' => [
+                        'type' => 'string',
+                        'required' => true,
+                    ],
                 ],
             ],
         ];
 
-        $this->assertEquals(
-            $expectedSchema,
-            $actualSchema->schema(),
-        );
-    }
-
-    private function allSpec(): array
-    {
-        return Yaml::parse(\file_get_contents(__DIR__ . '/valid-openapi-v3-spec.yaml'));
+        yield 'validate schema with two parameters in path' => [
+            [
+                'paths' => [
+                    '/url/one/{id_one}/two/{id_two}' => [
+                        'put' => [
+                            'parameters' => [
+                                [
+                                    'name' => 'id_one',
+                                    'in' => 'path',
+                                    'description' => 'first id',
+                                    'schema' => [
+                                        'type' => 'string',
+                                        'required' => true,
+                                    ],
+                                ],
+                                [
+                                    'name' => 'id_two',
+                                    'in' => 'path',
+                                    'description' => 'second id',
+                                    'schema' => [
+                                        'type' => 'string',
+                                        'required' => true,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            '/url/one/1/two/2',
+            'put',
+            [
+                'type' => 'object',
+                'properties' => [
+                    'id_one' => [
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                    'id_two' => [
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                ],
+            ],
+        ];
     }
 }

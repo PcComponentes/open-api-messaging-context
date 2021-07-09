@@ -21,7 +21,7 @@ final class UrlParameterSchemaParser
     public function parse(string $path, string $method): UrlParameterSchema
     {
         if (false === \array_key_exists('paths', $this->originalContent)){
-            return [];
+            throw new \InvalidArgumentException('Malformed OpenAPI spec!');
         }
 
         $urlParameterSchema = new UrlParameterSchema();
@@ -70,7 +70,7 @@ final class UrlParameterSchemaParser
     private function assertMethodRoot(string $path, string $method, $pathRoot): void
     {
         if (false === \array_key_exists($method, $pathRoot)) {
-            throw new \InvalidArgumentException(\sprintf('%s method not found on %s', $method, $path));
+            throw new \InvalidArgumentException(\sprintf('"%s" method not found for "%s"', $method, $path));
         }
     }
 
@@ -106,10 +106,7 @@ final class UrlParameterSchemaParser
 
             if (true === \array_key_exists('schema', $parameter)) {
                 $schema['properties'][$parameterName]['type'] = $parameter['schema']['type'];
-            }
-
-            if (true === \array_key_exists('required', $parameter)) {
-                $schema['properties'][$parameterName]['required'] = $parameter['required'];
+                $schema['properties'][$parameterName]['required'] = $parameter['schema']['required'] ?? true;
             }
         }
 
