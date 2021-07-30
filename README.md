@@ -74,6 +74,11 @@ Check if message has dispatched:
 ```gherkin
 Then the message "pccomponentes.example.1.domain_event.resource.resource_created" should be dispatched
 ```
+Check if message has not been dispatched:
+```gherkin
+Then the message "pccomponentes.example.1.domain_event.resource.resource_created" should not be dispatched
+```
+
 Configuration:
 ```yaml
 - PcComponentes\OpenApiMessagingContext\Behat\MessageValidatorOpenApiContext:

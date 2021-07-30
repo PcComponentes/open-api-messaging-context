@@ -85,6 +85,16 @@ final class MessageValidatorOpenApiContext implements Context
         }
     }
 
+    /**
+     * @Then the message :name should not be dispatched
+     */
+    public function theMessageShouldNotBeDispatched(string $name): void
+    {
+        if (true === $this->spyMiddleware->hasMessage($name)) {
+            throw new \Exception(sprintf('Message %s was not expected to be dispatched', $name));
+        }
+    }
+
     private function checkSchemaFile($filename): void
     {
         if (false === is_file($filename)) {
