@@ -115,7 +115,7 @@ When I receive a simple message with payload:
 """
 Then the message "pccomponentes.example.1.domain_event.resource.resource_created" should be dispatched
 ```
-This is useful to combine it with `Then` step in `MessageValidatorOpenApiContext`
+This is useful to combine it with `Then` step in `MessageValidatorOpenApiContext`, also you can combine them with expected message exceptions.
 
 Configuration:
 ```yaml
