@@ -38,7 +38,7 @@ final class SimpleMessageContext implements Context
     /**
      * @When I receive a simple failing message with payload:
      */
-    public function dispatchMessage(PyStringNode $payload): void
+    public function dispatchFailingMessage(PyStringNode $payload): void
     {
         try {
             $this->dispatchMessage($payload);
