@@ -69,8 +69,7 @@ final class ResponseValidatorOpenApiContext implements Context
         $responseJson = $this->minkContext->getSession()->getPage()->getContent();
 
         $allSpec = Yaml::parse(\file_get_contents($path));
-        $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($openApiPath, $method, $statusCode,
-            $contentType);
+        $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse($openApiPath, $method, $statusCode, $contentType);
 
         $validator = new JsonValidator($responseJson, new JsonSchema(\json_decode(\json_encode($schemaSpec), false)));
         $validation = $validator->validate();
