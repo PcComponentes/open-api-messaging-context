@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
-use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;
 
 final class JsonSchema

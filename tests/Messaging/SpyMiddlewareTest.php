@@ -149,7 +149,7 @@ class SpyMiddlewareTest extends TestCase
         return DomainEventFake::fromPayload(
             Uuid::from('efcf7fc2-2d6b-4a52-9763-4472a37b3c24'),
             Uuid::from('efcf7fc2-2d6b-4a52-9763-4472a37b3c25'),
-            new DateTimeValueObject(),
+            DateTimeValueObject::from('now'),
             [],
         );
     }

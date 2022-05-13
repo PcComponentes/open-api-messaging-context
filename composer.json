@@ -26,7 +26,7 @@
     "symfony/messenger": "^4.4|^5.0",
     "justinrainbow/json-schema": "^5.2",
     "behat/behat": "^3.5",
-    "pccomponentes/ddd": "^2.0",
+    "pccomponentes/ddd": "^2.0 | ^3.0",
     "beberlei/assert": "^3.2",
     "friends-of-behat/symfony-extension": "^2.0",
     "friends-of-behat/mink": "^1.8",
