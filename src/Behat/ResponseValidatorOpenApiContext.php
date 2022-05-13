@@ -7,7 +7,6 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\MinkContext;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonSchema;
-use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationCollection;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use PcComponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
