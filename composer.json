@@ -24,6 +24,7 @@
     "php": "^7.4|^8.0",
     "symfony/yaml": "^4.4|^5.0",
     "symfony/messenger": "^4.4|^5.0",
+    "symfony/routing": "^4.4|^5.0",
     "justinrainbow/json-schema": "^5.2",
     "behat/behat": "^3.5",
     "pccomponentes/ddd": "^2.0 | ^3.0",

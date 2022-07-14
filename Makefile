@@ -22,3 +22,6 @@ bash:
 
 logs:
 	docker-compose logs -f ${DOCKER_PHP_SERVICE}
+
+test:
+	docker-compose run --rm -u ${UID}:${GID} ${DOCKER_PHP_SERVICE} sh -c './vendor/bin/phpunit'
