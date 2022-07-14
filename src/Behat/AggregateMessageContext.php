@@ -69,7 +69,7 @@ final class AggregateMessageContext implements Context
             ->verifyNow();
 
         Assert::lazy()->tryAll()
-            ->that($content['data']['attributes']['aggregate_id'], 'aggregate_id')->uuid()
+            ->that($content['data']['attributes']['aggregate_id'], 'aggregate_id')->string()->notEmpty()
             ->verifyNow();
     }
 }
