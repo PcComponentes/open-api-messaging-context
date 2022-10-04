@@ -9,6 +9,7 @@ use PcComponentes\Ddd\Domain\Model\ValueObject\Uuid;
 use PcComponentes\Ddd\Util\Message\AggregateMessage;
 use PcComponentes\Ddd\Util\Message\Message;
 use PcComponentes\Ddd\Util\Message\SimpleMessage;
+use PcComponentes\Ddd\Util\Message\ValueObject\AggregateId;
 use PcComponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
 use PcComponentes\OpenApiMessagingContext\Serialization\SchemaValidatorSimpleMessageSerializable;
 use PHPUnit\Framework\TestCase;
@@ -148,7 +149,7 @@ class SpyMiddlewareTest extends TestCase
     {
         return DomainEventFake::fromPayload(
             Uuid::from('efcf7fc2-2d6b-4a52-9763-4472a37b3c24'),
-            Uuid::from('efcf7fc2-2d6b-4a52-9763-4472a37b3c25'),
+            AggregateId::from('efcf7fc2-2d6b-4a52-9763-4472a37b3c25'),
             DateTimeValueObject::from('now'),
             [],
         );
