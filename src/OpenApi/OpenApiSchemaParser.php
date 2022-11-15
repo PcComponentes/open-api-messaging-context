@@ -45,9 +45,7 @@ final class OpenApiSchemaParser
     {
         $aux = [];
 
-        if (\array_key_exists('nullable', $data)) {
-            $data = $this->convertNullableTypeToJsonSchema($data);
-        }
+        $data = $this->convertNullableTypeToJsonSchema($data);
 
         foreach ($data as $key => $elem) {
             if ('$ref' === $key) {
@@ -93,9 +91,9 @@ final class OpenApiSchemaParser
     private function assertStatusCodeRoot(string $path, string $method, int $statusCode, $methodRoot): void
     {
         if (false === \array_key_exists('responses', $methodRoot) || false === \array_key_exists(
-            $statusCode,
-            $methodRoot['responses']
-        )) {
+                $statusCode,
+                $methodRoot['responses']
+            )) {
             throw new \InvalidArgumentException(
                 \sprintf('%s response not found on %s path with %s method', $statusCode, $path, $method)
             );
@@ -124,14 +122,13 @@ final class OpenApiSchemaParser
 
     private function convertNullableTypeToJsonSchema(array $data): array
     {
-        $data['oneOf'] = [
-            ['type' => null],
-        ];
-
-        if (\array_key_exists('type', $data)) {
-            $data['oneOf'][] = ['type' => $data['type']];
-            unset($data['type']);
+        if (false === \array_key_exists('nullable', $data)) {
+            return $data;
         }
+
+        $data['type'] = \is_array($data['type'])
+            ? \array_merge($data['type'], ['null'])
+            : [$data['type'], 'null'];
 
         unset($data['nullable']);
 
