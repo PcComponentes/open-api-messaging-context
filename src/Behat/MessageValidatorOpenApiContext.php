@@ -12,7 +12,7 @@ use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use Symfony\Component\Yaml\Yaml;
 
-final class MessageValidatorOpenApiContext implements Context
+final class MessageValidatorOpenApiContext extends ValidatorApiContext implements Context
 {
     private string $rootPath;
     private SpyMiddleware $spyMiddleware;
@@ -42,6 +42,7 @@ final class MessageValidatorOpenApiContext implements Context
         $jsonMessages = $this->spyMiddleware->getMessagesFromName($name);
 
         $allSpec = Yaml::parse(file_get_contents($path));
+        $allSpec = $this->getDataExternalReferences($allSpec, $path);
         $schema = (new AsyncApiParser($allSpec))->parse($name);
 
         $validations = [];
@@ -92,15 +93,6 @@ final class MessageValidatorOpenApiContext implements Context
     {
         if (true === $this->spyMiddleware->hasMessage($name)) {
             throw new \Exception(sprintf('Message %s was not expected to be dispatched', $name));
-        }
-    }
-
-    private function checkSchemaFile($filename): void
-    {
-        if (false === is_file($filename)) {
-            throw new \RuntimeException(
-                'The JSON schema doesn\'t exist'
-            );
         }
     }
 }

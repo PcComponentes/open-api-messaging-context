@@ -10,7 +10,7 @@ use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use PcComponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
 use Symfony\Component\Yaml\Yaml;
 
-abstract class ResponseValidatorOpenApiContext implements Context
+abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext implements Context
 {
     private const HTTP_NO_CONTENT_CODE = 204;
 
@@ -32,6 +32,7 @@ abstract class ResponseValidatorOpenApiContext implements Context
         $responseJson = $this->extractContent();
 
         $allSpec = Yaml::parse(file_get_contents($path));
+        $allSpec = $this->getDataExternalReferences($allSpec, $path);
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->parse($schema);
 
         $validator = new JsonValidator(
@@ -60,6 +61,7 @@ abstract class ResponseValidatorOpenApiContext implements Context
         $responseJson = $this->extractContent();
 
         $allSpec = Yaml::parse(\file_get_contents($path));
+        $allSpec = $this->getDataExternalReferences($allSpec, $path);
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse(
             $openApiPath,
             $method,
@@ -85,15 +87,6 @@ abstract class ResponseValidatorOpenApiContext implements Context
     abstract protected function extractStatusCode(): int;
 
     abstract protected function extractContent(): string;
-
-    private function checkSchemaFile($filename): void
-    {
-        if (false === \is_file($filename)) {
-            throw new \RuntimeException(
-                "The JSON schema doesn't exist",
-            );
-        }
-    }
 
     private function contentType(): string
     {

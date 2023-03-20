@@ -63,6 +63,14 @@ final class AsyncApiParser
     private function findDefinition(string $def): array
     {
         $cleanDef = \preg_replace('/^\#\//', '', $def);
+
+        if (false !== \strpos($cleanDef, '.yaml')) {
+            [$filename, $refDef] = \explode('#/', $cleanDef);
+            $allSpec = $this->originalContent[$filename];
+
+            return (new self($allSpec))->extractData(['$ref' => $refDef]);
+        }
+
         $explodedDef = \explode('/', $cleanDef);
         $foundDef = \array_reduce($explodedDef, function ($last, $elem) {
             return null === $last ? $this->originalContent[$elem] : $last[$elem];
