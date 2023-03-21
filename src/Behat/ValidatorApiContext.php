@@ -28,6 +28,8 @@ abstract class ValidatorApiContext
 
             $this->checkSchemaFile($newPath);
             $data = Yaml::parse(\file_get_contents($newPath));
+            $data = $this->getDataExternalReferences($data, $newPath);
+
             $dataExternalReferences[$pathExternalReference] = $data;
         }
 
