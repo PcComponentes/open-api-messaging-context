@@ -14,6 +14,7 @@ final class SimpleMessageContext implements Context
 {
     private MessageBusInterface $bus;
     private SimpleMessageUnserializable $simpleMessageUnserializable;
+    private \Throwable $lastException;
 
     public function __construct(
         MessageBusInterface $bus,
@@ -34,6 +35,42 @@ final class SimpleMessageContext implements Context
         $this->bus->dispatch($message);
     }
 
+    /**
+     * @When I receive a simple failing message with payload:
+     */
+    public function dispatchFailingMessage(PyStringNode $payload): void
+    {
+        try {
+            $this->dispatchMessage($payload);
+        } catch (\Throwable $exception) {
+            $this->lastException = $exception;
+
+            return;
+        }
+
+        $message = 'Expecting a failed message';
+
+        throw new \Exception($message);
+    }
+
+    /**
+     * @Then exception class for the last message should be :exceptionType
+     */
+    public function checkExceptionClass($exceptionType): void
+    {
+        if (get_class($this->lastException) === $exceptionType) {
+            return;
+        }
+
+        $message = \sprintf(
+            'Expecting a failed message with exception \'%s\' but got \'%s\'',
+            $exceptionType,
+            get_class($this->lastException),
+        );
+
+        throw new \Exception($message);
+    }
+    
     private function payloadToStream(string $rawPayload): SimpleMessageStream
     {
         $payload = \json_decode($rawPayload, true, 512, \JSON_THROW_ON_ERROR);
