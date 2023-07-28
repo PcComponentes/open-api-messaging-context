@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
@@ -6,13 +7,8 @@ use JsonSchema\Validator;
 
 final class JsonValidator
 {
-    private string $jsonToValidate;
-    private JsonSchema $jsonSchema;
-
-    public function __construct(string $jsonToValidate, JsonSchema $jsonSchema)
+    public function __construct(private string $jsonToValidate, private JsonSchema $jsonSchema)
     {
-        $this->jsonToValidate = $jsonToValidate;
-        $this->jsonSchema = $jsonSchema;
     }
 
     public function validate(): JsonValidation

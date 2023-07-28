@@ -5,12 +5,10 @@ namespace PcComponentes\OpenApiMessagingContext\AsyncApi;
 
 final class AsyncApiParser
 {
-    private array $originalContent;
     private array $versionExtractor;
 
-    public function __construct(array $originalContent)
+    public function __construct(private array $originalContent)
     {
-        $this->originalContent = $originalContent;
         $this->versionExtractor = [
             '1.2' => new V12ChannelExtractor(),
             '2.0' => new V20ChannelExtractor(),
@@ -38,19 +36,25 @@ final class AsyncApiParser
             return $this->versionExtractor['2.0'];
         }
 
-        throw new \InvalidArgumentException(\sprintf('%s async api version not supported', $this->originalContent['asyncapi']));
+        throw new \InvalidArgumentException(
+            \sprintf('%s async api version not supported', $this->originalContent['asyncapi']),
+        );
     }
 
     private function extractData(array $data): array
     {
         $aux = [];
+
         foreach ($data as $key => $elem) {
-            if ($key === '$ref') {
+            if ('$ref' === $key) {
                 $aux = $this->findDefinition($elem);
+
                 continue;
             }
+
             if (\is_array($elem)) {
                 $aux[$key] = $this->extractData($elem);
+
                 continue;
             }
 
@@ -72,9 +76,12 @@ final class AsyncApiParser
         }
 
         $explodedDef = \explode('/', $cleanDef);
-        $foundDef = \array_reduce($explodedDef, function ($last, $elem) {
-            return null === $last ? $this->originalContent[$elem] : $last[$elem];
-        });
+        $foundDef = \array_reduce(
+            $explodedDef,
+            fn ($last, $elem) => null === $last
+                ? $this->originalContent[$elem]
+                : $last[$elem],
+        );
 
         return $this->extractData(\array_key_exists('payload', $foundDef) ? $foundDef['payload'] : $foundDef);
     }

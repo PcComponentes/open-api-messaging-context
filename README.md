@@ -48,15 +48,15 @@ default:
 And use the `Then` statement for validate messages:
 
 ```gherkin
-  Scenario: My awesome scenario
-    Given the environment is clean
-    When I send a "POST" request to "/resource/" with body:
-    """
-{
-  "my-awesome-data": "foo",
-}
-    """
-    Then the published message "pccomponentes.example.1.domain_event.resource.resource_created" should be valid according to swagger "docs/asyncapi.yml"
+Scenario: My awesome scenario
+  Given the environment is clean
+  When I send a "POST" request to "/resource/" with body:
+  """
+  {
+    "my-awesome-data": "foo",
+  }
+  """
+  Then the published message "pccomponentes.example.1.domain_event.resource.resource_created" should be valid according to swagger "docs/asyncapi.yml"
 ```
 
 Your schema must be writen according to https://www.asyncapi.com/ specification.

@@ -10,13 +10,9 @@ final class RequestHistoryResponseValidatorOpenApiContext extends ResponseValida
 {
     private const CONTENT_TYPE_RESPONSE_HEADER_KEY = 'content-type';
 
-    private RequestHistory $requestHistory;
-
-    public function __construct(string $rootPath, RequestHistory $requestHistory)
+    public function __construct(string $rootPath, private RequestHistory $requestHistory)
     {
         parent::__construct($rootPath);
-
-        $this->requestHistory = $requestHistory;
     }
 
     protected function extractMethod(): string

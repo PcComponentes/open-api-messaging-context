@@ -15,8 +15,11 @@ final class SchemaValidatorAggregateMessageSerializable implements AggregateMess
                 'message_id' => $message->messageId(),
                 'type' => $message::messageName(),
                 'occurred_on' => $message->occurredOn()->getTimestamp(),
-                'attributes' => array_merge(['aggregate_id' => $message->aggregateId()->value()], $message->messagePayload()),
-            ]
+                'attributes' => \array_merge(
+                    ['aggregate_id' => $message->aggregateId()->value()],
+                    $message->messagePayload(),
+                ),
+            ],
         );
     }
 }

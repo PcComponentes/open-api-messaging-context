@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PcComponentes\OpenApiMessagingContext\AsyncApi;
 
@@ -7,7 +8,10 @@ final class V12ChannelExtractor implements ChannelExtractor
     public function extract(array $originalContent, string $channel): array
     {
         $topicName = $channel;
-        $baseTopic = \array_key_exists('baseTopic', $originalContent) ? $originalContent['baseTopic'] : '';
+        $baseTopic = \array_key_exists('baseTopic', $originalContent)
+            ? $originalContent['baseTopic']
+            : '';
+
         if ('' !== $baseTopic) {
             $topicName = \preg_replace('/^' . $baseTopic . '\./', '', $topicName);
         }

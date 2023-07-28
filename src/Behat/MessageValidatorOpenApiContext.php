@@ -14,29 +14,20 @@ use Symfony\Component\Yaml\Yaml;
 
 final class MessageValidatorOpenApiContext extends ValidatorApiContext implements Context
 {
-    private string $rootPath;
-    private SpyMiddleware $spyMiddleware;
-
-    public function __construct(string $rootPath, SpyMiddleware $spyMiddleware)
+    public function __construct(private string $rootPath, private SpyMiddleware $spyMiddleware)
     {
-        $this->rootPath = $rootPath;
-        $this->spyMiddleware = $spyMiddleware;
     }
 
-    /**
-     * @BeforeScenario
-     */
+    /** @BeforeScenario */
     public function bootstrapEnvironment(): void
     {
         $this->spyMiddleware->reset();
     }
 
-    /**
-     * @Then the published message :name should be valid according to swagger :dumpPath
-     */
+    /** @Then the published message :name should be valid according to swagger :dumpPath */
     public function theMessageShouldBeValidAccordingToTheSwagger($name, $dumpPath): void
     {
-        $path = realpath($this->rootPath . '/' . $dumpPath);
+        $path = \realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
         $jsonMessages = $this->spyMiddleware->getMessagesFromName($name);
@@ -53,46 +44,46 @@ final class MessageValidatorOpenApiContext extends ValidatorApiContext implement
         }
 
         $jsonValidation = new JsonValidationCollection(...$validations);
+
         if ($jsonValidation->hasAnyError()) {
             throw new JsonValidationException($jsonValidation->buildErrorMessage());
         }
     }
 
-    /**
-     * @Then the message :name should be dispatched
-     */
+    /** @Then the message :name should be dispatched */
     public function theMessageShouldBeDispatched(string $name): void
     {
         if (false === $this->spyMiddleware->hasMessage($name)) {
-            throw new \Exception(sprintf('Message %s was expected to dispatch, actually not dispatched', $name));
+            throw new \Exception(
+                \sprintf('Message %s was expected to dispatch, actually not dispatched', $name),
+            );
         }
     }
 
-    /**
-     * @Then the message :name should be dispatched :times times
-     */
+    /** @Then the message :name should be dispatched :times times */
     public function theMessageShouldBeDispatchedManyTimes(string $name, int $times): void
     {
         $countMessages = $this->spyMiddleware->countMessagesFromName($name);
+
         if ($times !== $countMessages) {
             throw new \Exception(
-                sprintf(
+                \sprintf(
                     'Message %s was expected to dispatch %d times, actually dispatched %d times.',
                     $name,
                     $times,
-                    $countMessages
+                    $countMessages,
                 ),
             );
         }
     }
 
-    /**
-     * @Then the message :name should not be dispatched
-     */
+    /** @Then the message :name should not be dispatched */
     public function theMessageShouldNotBeDispatched(string $name): void
     {
         if (true === $this->spyMiddleware->hasMessage($name)) {
-            throw new \Exception(sprintf('Message %s was not expected to be dispatched', $name));
+            throw new \Exception(
+                \sprintf('Message %s was not expected to be dispatched', $name),
+            );
         }
     }
 }

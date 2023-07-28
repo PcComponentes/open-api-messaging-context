@@ -14,16 +14,11 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
 {
     private const HTTP_NO_CONTENT_CODE = 204;
 
-    private string $rootPath;
-
-    public function __construct(string $rootPath)
+    public function __construct(private string $rootPath)
     {
-        $this->rootPath = $rootPath;
     }
 
-    /**
-     * @Then the JSON response should be valid according to OpenApi :dumpPath schema :schema
-     */
+    /** @Then the JSON response should be valid according to OpenApi :dumpPath schema :schema */
     public function theJsonResponseShouldBeValidAccordingToOpenApiSchema($dumpPath, $schema): void
     {
         $path = \realpath($this->rootPath . '/' . $dumpPath);
@@ -46,9 +41,7 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
         }
     }
 
-    /**
-     * @Then the response should be valid according to OpenApi :dumpPath with path :openApiPath
-     */
+    /** @Then the response should be valid according to OpenApi :dumpPath with path :openApiPath */
     public function theResponseShouldBeValidAccordingToOpenApiWithPath(string $dumpPath, string $openApiPath): void
     {
         $path = \realpath($this->rootPath . '/' . $dumpPath);
