@@ -14,20 +14,25 @@ use PcComponentes\OpenApiMessagingContext\Messaging\SpyMiddleware;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
 use PcComponentes\OpenApiMessagingContext\Tests\Messaging\DomainEventFake;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\StackMiddleware;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class MessageValidatorOpenApiContextTest extends TestCase
 {
     private MessageValidatorOpenApiContext $messageValidatorOpenApiContext;
     private SpyMiddleware $spyMiddleware;
+    private CacheInterface $cacheAdapter;
 
     protected function setUp(): void
     {
         $this->spyMiddleware = new SpyMiddleware();
+        $this->cacheAdapter = new NullAdapter();
         $this->messageValidatorOpenApiContext = new MessageValidatorOpenApiContext(
             __DIR__,
             $this->spyMiddleware,
+            $this->cacheAdapter,
         );
         $this->spyMiddleware->reset();
     }

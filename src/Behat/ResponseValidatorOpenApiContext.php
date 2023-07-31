@@ -9,12 +9,14 @@ use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use PcComponentes\OpenApiMessagingContext\OpenApi\OpenApiSchemaParser;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext implements Context
 {
     private const HTTP_NO_CONTENT_CODE = 204;
 
-    public function __construct(private string $rootPath)
+    public function __construct(private string $rootPath, private CacheInterface $cacheAdapter)
     {
     }
 
@@ -26,8 +28,17 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
 
         $responseJson = $this->extractContent();
 
-        $allSpec = Yaml::parse(file_get_contents($path));
-        $allSpec = $this->getDataExternalReferences($allSpec, $path);
+        $allSpec = $this->cacheAdapter->get(
+            \md5($path),
+            function (ItemInterface $item) use ($path) {
+                $item->expiresAfter(null);
+
+                $allSpec = Yaml::parse(file_get_contents($path));
+
+                return $this->getDataExternalReferences($allSpec, $path);
+            },
+        );
+
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->parse($schema);
 
         $validator = new JsonValidator(
@@ -53,8 +64,17 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
 
         $responseJson = $this->extractContent();
 
-        $allSpec = Yaml::parse(\file_get_contents($path));
-        $allSpec = $this->getDataExternalReferences($allSpec, $path);
+        $allSpec = $this->cacheAdapter->get(
+            \md5($path),
+            function (ItemInterface $item) use ($path) {
+                $item->expiresAfter(null);
+
+                $allSpec = Yaml::parse(file_get_contents($path));
+
+                return $this->getDataExternalReferences($allSpec, $path);
+            },
+        );
+
         $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromResponse(
             $openApiPath,
             $method,
