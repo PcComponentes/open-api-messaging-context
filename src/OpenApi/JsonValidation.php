@@ -1,16 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
 final class JsonValidation
 {
-    private string $json;
-    private ?string $errorMessage;
-
-    public function __construct(string $json, ?string $errorMessage)
+    public function __construct(private string $json, private ?string $errorMessage)
     {
-        $this->json = $json;
-        $this->errorMessage = $errorMessage;
     }
 
     public function hasError(): bool

@@ -7,11 +7,8 @@ use JsonSchema\Validator;
 
 final class JsonSchema
 {
-    private $schema;
-
-    public function __construct($schema)
+    public function __construct(private $schema)
     {
-        $this->schema = $schema;
     }
 
     public function validate(string $json, Validator $validator): JsonValidation
@@ -22,8 +19,9 @@ final class JsonSchema
 
         if (!$validator->isValid()) {
             $msg = 'Violations:'.\PHP_EOL;
+
             foreach ($validator->getErrors() as $error) {
-                $msg .= sprintf("  - [%s] %s".\PHP_EOL, $error['property'], $error['message']);
+                $msg .= \sprintf("  - [%s] %s".\PHP_EOL, $error['property'], $error['message']);
             }
         }
 

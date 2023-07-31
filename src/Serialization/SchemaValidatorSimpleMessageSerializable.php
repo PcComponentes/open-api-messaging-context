@@ -15,7 +15,7 @@ final class SchemaValidatorSimpleMessageSerializable implements SimpleMessageSer
                 'message_id' => $message->messageId(),
                 'type' => $message::messageName(),
                 'attributes' => $message->messagePayload(),
-            ]
+            ],
         );
     }
 }

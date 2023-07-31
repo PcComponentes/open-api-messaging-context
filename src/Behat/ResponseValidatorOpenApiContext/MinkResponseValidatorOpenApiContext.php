@@ -13,9 +13,7 @@ final class MinkResponseValidatorOpenApiContext extends ResponseValidatorOpenApi
 
     private MinkContext $minkContext;
 
-    /**
-     * @BeforeScenario
-     */
+    /** @BeforeScenario */
     public function bootstrapEnvironment(BeforeScenarioScope $scope): void
     {
         $this->minkContext = $scope->getEnvironment()->getContext(MinkContext::class);

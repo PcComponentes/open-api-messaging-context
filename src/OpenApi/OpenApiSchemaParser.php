@@ -5,19 +5,18 @@ namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
 final class OpenApiSchemaParser
 {
-    private array $originalContent;
-
-    public function __construct(array $originalContent)
+    public function __construct(private array $originalContent)
     {
-        $this->originalContent = $originalContent;
     }
 
     public function parse($name): array
     {
         $schemaSpec = $this->originalContent['components']['schemas'][$name];
+
         if (null === $schemaSpec) {
             throw new \InvalidArgumentException(\sprintf('%s schema not found', $name));
         }
+
         return $this->extractData($schemaSpec);
     }
 
@@ -38,6 +37,7 @@ final class OpenApiSchemaParser
         }
 
         $this->assertContentTypeRoot($path, $method, $statusCode, $contentType, $statusCodeRoot);
+
         return $this->extractData($statusCodeRoot['content'][$contentType]['schema']);
     }
 
@@ -50,10 +50,13 @@ final class OpenApiSchemaParser
         foreach ($data as $key => $elem) {
             if ('$ref' === $key) {
                 $aux = $this->findDefinition($elem);
+
                 continue;
             }
+
             if (\is_array($elem)) {
                 $aux[$key] = $this->extractData($elem);
+
                 continue;
             }
 
@@ -75,9 +78,12 @@ final class OpenApiSchemaParser
         }
 
         $explodedDef = \explode('/', $cleanDef);
-        $foundDef = \array_reduce($explodedDef, function ($last, $elem) {
-            return null === $last ? $this->originalContent[$elem] : $last[$elem];
-        });
+        $foundDef = \array_reduce(
+            $explodedDef,
+            fn ($last, $elem) => null === $last
+                ? $this->originalContent[$elem]
+                : $last[$elem],
+        );
 
         return $this->extractData(\array_key_exists('payload', $foundDef) ? $foundDef['payload'] : $foundDef);
     }
@@ -99,11 +105,11 @@ final class OpenApiSchemaParser
     private function assertStatusCodeRoot(string $path, string $method, int $statusCode, $methodRoot): void
     {
         if (false === \array_key_exists('responses', $methodRoot) || false === \array_key_exists(
-                $statusCode,
-                $methodRoot['responses']
-            )) {
+            $statusCode,
+            $methodRoot['responses'],
+        )) {
             throw new \InvalidArgumentException(
-                \sprintf('%s response not found on %s path with %s method', $statusCode, $path, $method)
+                \sprintf('%s response not found on %s path with %s method', $statusCode, $path, $method),
             );
         }
     }
@@ -113,7 +119,7 @@ final class OpenApiSchemaParser
         string $method,
         int $statusCode,
         string $contentType,
-        $statusCodeRoot
+        $statusCodeRoot,
     ): void {
         if (false === \array_key_exists($contentType, $statusCodeRoot['content'])) {
             throw new \InvalidArgumentException(
@@ -122,8 +128,8 @@ final class OpenApiSchemaParser
                     $contentType,
                     $path,
                     $method,
-                    $statusCode
-                )
+                    $statusCode,
+                ),
             );
         }
     }

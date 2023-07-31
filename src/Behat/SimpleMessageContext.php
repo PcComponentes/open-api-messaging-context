@@ -12,24 +12,17 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class SimpleMessageContext implements Context
 {
-    private MessageBusInterface $bus;
-    private SimpleMessageUnserializable $simpleMessageUnserializable;
-
     public function __construct(
-        MessageBusInterface $bus,
-        SimpleMessageUnserializable $simpleMessageUnserializable
+        private MessageBusInterface $bus,
+        private SimpleMessageUnserializable $simpleMessageUnserializable,
     ) {
-        $this->bus = $bus;
-        $this->simpleMessageUnserializable = $simpleMessageUnserializable;
     }
 
-    /**
-     * @When I receive a simple message with payload:
-     */
+    /** @When I receive a simple message with payload: */
     public function dispatchMessage(PyStringNode $payload): void
     {
         $message = $this->simpleMessageUnserializable->unserialize(
-            $this->payloadToStream($payload->getRaw())
+            $this->payloadToStream($payload->getRaw()),
         );
         $this->bus->dispatch($message);
     }

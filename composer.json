@@ -20,28 +20,29 @@
     }
   },
   "require": {
+    "php": "^8.0",
     "ext-json": "*",
-    "php": "^7.4 || ^8.0",
-    "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
-    "symfony/messenger": "^4.4 || ^5.0 || ^6.0",
+    "beberlei/assert": "^3.3",
+    "behat/behat": "^3.13",
+    "friends-of-behat/mink": "^1.10",
+    "friends-of-behat/mink-browserkit-driver": "^1.6",
+    "friends-of-behat/mink-extension": "^2.7",
+    "friends-of-behat/symfony-extension": "^2.4",
     "justinrainbow/json-schema": "^5.2",
-    "behat/behat": "^3.5",
-    "pccomponentes/ddd": "^2.0 || ^3.0 || ^4.0",
-    "beberlei/assert": "^3.2",
-    "friends-of-behat/symfony-extension": "^2.0",
-    "friends-of-behat/mink": "^1.8",
-    "friends-of-behat/mink-extension": "^2.4",
-    "friends-of-behat/mink-browserkit-driver": "^1.4"
+    "pccomponentes/ddd": "^3.0 || ^4.0",
+    "symfony/cache-contracts": "^3.0",
+    "symfony/messenger": "^5.0 || ^6.0",
+    "symfony/yaml": "^5.0 || ^6.0"
   },
   "require-dev": {
-    "pccomponentes/ganchudo": "^1.0",
     "phpunit/phpunit": "^9.0",
-    "symfony/var-dumper": "^4.4|^5.0|^6.0",
-    "pccomponentes/coding-standard": "^1.0"
+    "symfony/var-dumper": "^5.0 || ^6.0",
+    "pccomponentes/coding-standard": "^3.0"
   },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
-    }
+    },
+    "sort-packages": true
   }
 }

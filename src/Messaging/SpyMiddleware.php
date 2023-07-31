@@ -27,16 +27,11 @@ final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        /** @var Message $message */
         $message = $envelope->getMessage();
+        \assert($message instanceof Message);
         $message->accept($this);
 
         return $stack->next()->handle($envelope, $stack);
-    }
-
-    private function save($key, $data): void
-    {
-        self::$messages[$key][] = $data;
     }
 
     public function getMessage(string $name)
@@ -64,7 +59,9 @@ final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
 
     public function countMessagesFromName(string $name): int
     {
-        return $this->hasMessage($name) ? \count(self::$messages[$name]) : 0;
+        return $this->hasMessage($name)
+            ? \count(self::$messages[$name])
+            : 0;
     }
 
     public function reset(): void
@@ -82,5 +79,10 @@ final class SpyMiddleware implements MiddlewareInterface, MessageVisitor
     {
         $data = $this->aggregateMessageSerializable->serialize($aggregateMessage);
         $this->save($aggregateMessage::messageName(), $data);
+    }
+
+    private function save($key, $data): void
+    {
+        self::$messages[$key][] = $data;
     }
 }

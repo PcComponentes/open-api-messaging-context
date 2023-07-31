@@ -12,24 +12,17 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final class AggregateMessageContext implements Context
 {
-    private MessageBusInterface $bus;
-    private AggregateMessageUnserializable $aggregateMessageUnserializable;
-
     public function __construct(
-        MessageBusInterface $bus,
-        AggregateMessageUnserializable $aggregateMessageUnserializable
+        private MessageBusInterface $bus,
+        private AggregateMessageUnserializable $aggregateMessageUnserializable,
     ) {
-        $this->bus = $bus;
-        $this->aggregateMessageUnserializable = $aggregateMessageUnserializable;
     }
 
-    /**
-     * @When I receive an aggregate message with payload:
-     */
+    /** @When I receive an aggregate message with payload: */
     public function dispatchMessage(PyStringNode $payload): void
     {
         $message = $this->aggregateMessageUnserializable->unserialize(
-            $this->payloadToStream($payload->getRaw())
+            $this->payloadToStream($payload->getRaw()),
         );
         $this->bus->dispatch($message);
     }

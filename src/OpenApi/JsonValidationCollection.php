@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace PcComponentes\OpenApiMessagingContext\OpenApi;
 
@@ -30,12 +31,13 @@ final class JsonValidationCollection
 
         $validationsWithErrors = \array_filter(
             $this->jsonValidations,
-            static fn(JsonValidation $elem) => $elem->hasError()
+            static fn (JsonValidation $elem) => $elem->hasError()
         );
 
-        $msg = PHP_EOL;
+        $msg = \PHP_EOL;
+
         foreach ($validationsWithErrors as $index => $validation) {
-            $msg .= sprintf('JSON message %d does not validate. ' . PHP_EOL, $index);
+            $msg .= \sprintf('JSON message %d does not validate. ' . \PHP_EOL, $index);
             $msg .= $validation->errorMessage();
         }
 
