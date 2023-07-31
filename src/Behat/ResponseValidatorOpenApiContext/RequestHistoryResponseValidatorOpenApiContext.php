@@ -5,14 +5,15 @@ namespace PcComponentes\OpenApiMessagingContext\Behat\ResponseValidatorOpenApiCo
 
 use PcComponentes\OpenApiMessagingContext\Behat\ResponseValidatorOpenApiContext;
 use PcComponentes\OpenApiMessagingContext\Utils\RequestHistory;
+use Symfony\Contracts\Cache\CacheInterface;
 
 final class RequestHistoryResponseValidatorOpenApiContext extends ResponseValidatorOpenApiContext
 {
     private const CONTENT_TYPE_RESPONSE_HEADER_KEY = 'content-type';
 
-    public function __construct(string $rootPath, private RequestHistory $requestHistory)
+    public function __construct(string $rootPath, private RequestHistory $requestHistory, CacheInterface $cacheAdapter)
     {
-        parent::__construct($rootPath);
+        parent::__construct($rootPath, $cacheAdapter);
     }
 
     protected function extractMethod(): string

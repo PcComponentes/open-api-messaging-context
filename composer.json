@@ -30,7 +30,7 @@
     "friends-of-behat/symfony-extension": "^2.4",
     "justinrainbow/json-schema": "^5.2",
     "pccomponentes/ddd": "^3.0 || ^4.0",
-    "symfony/cache-contracts": "^3.0",
+    "symfony/cache": "^5.0 || ^6.0",
     "symfony/messenger": "^5.0 || ^6.0",
     "symfony/yaml": "^5.0 || ^6.0"
   },

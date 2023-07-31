@@ -11,11 +11,16 @@ use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationCollection;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidationException;
 use PcComponentes\OpenApiMessagingContext\OpenApi\JsonValidator;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 final class MessageValidatorOpenApiContext extends ValidatorApiContext implements Context
 {
-    public function __construct(private string $rootPath, private SpyMiddleware $spyMiddleware)
-    {
+    public function __construct(
+        private string $rootPath,
+        private SpyMiddleware $spyMiddleware,
+        private CacheInterface $cacheAdapter,
+    ) {
     }
 
     /** @BeforeScenario */
@@ -32,8 +37,17 @@ final class MessageValidatorOpenApiContext extends ValidatorApiContext implement
 
         $jsonMessages = $this->spyMiddleware->getMessagesFromName($name);
 
-        $allSpec = Yaml::parse(file_get_contents($path));
-        $allSpec = $this->getDataExternalReferences($allSpec, $path);
+        $allSpec = $this->cacheAdapter->get(
+            \md5($path),
+            function (ItemInterface $item) use ($path) {
+                $item->expiresAfter(null);
+
+                $allSpec = Yaml::parse(file_get_contents($path));
+
+                return $this->getDataExternalReferences($allSpec, $path);
+            },
+        );
+
         $schema = (new AsyncApiParser($allSpec))->parse($name);
 
         $validations = [];
