@@ -33,15 +33,15 @@ abstract class ValidatorApiContext
         return \array_merge($allSpec, $dataExternalReferences);
     }
 
-    private function getDataExternalReferencesCached(string $newPath): array
+    private function getDataExternalReferencesCached(string $path): array
     {
-        if (false === \array_key_exists($newPath,  $this->dataExternalReferences)) {
-            $this->checkSchemaFile($newPath);
-            $data = Yaml::parse(\file_get_contents($newPath));
-            $this->dataExternalReferences[$newPath] = $this->getDataExternalReferences($data, $newPath);
+        if (false === \array_key_exists($path, $this->dataExternalReferences)) {
+            $this->checkSchemaFile($path);
+            $data = Yaml::parse(\file_get_contents($path));
+            $this->dataExternalReferences[$path] = $this->getDataExternalReferences($data, $path);
         }
 
-        return $this->dataExternalReferences[$newPath];
+        return $this->dataExternalReferences[$path];
     }
 
     private function externalReferencesExtractor(array $array): array
