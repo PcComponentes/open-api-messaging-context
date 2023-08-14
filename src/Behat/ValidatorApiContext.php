@@ -7,7 +7,9 @@ use Symfony\Component\Yaml\Yaml;
 
 abstract class ValidatorApiContext
 {
-    protected function checkSchemaFile($filename): void
+    private array $dataExternalReferences = [];
+
+    protected function checkSchemaFile(string $filename): void
     {
         if (false === \is_file($filename)) {
             throw new \RuntimeException(
@@ -25,15 +27,21 @@ abstract class ValidatorApiContext
         foreach ($externalReferences as $externalReference) {
             [$pathExternalReference] = \explode('#', $externalReference);
             $newPath = \realpath(\dirname($originalPath) . '/' . $pathExternalReference);
-
-            $this->checkSchemaFile($newPath);
-            $data = Yaml::parse(\file_get_contents($newPath));
-            $data = $this->getDataExternalReferences($data, $newPath);
-
-            $dataExternalReferences[$pathExternalReference] = $data;
+            $dataExternalReferences[$pathExternalReference] = $this->getDataExternalReferencesCached($newPath);
         }
 
         return \array_merge($allSpec, $dataExternalReferences);
+    }
+
+    private function getDataExternalReferencesCached(string $path): array
+    {
+        if (false === \array_key_exists($path, $this->dataExternalReferences)) {
+            $this->checkSchemaFile($path);
+            $data = Yaml::parse(\file_get_contents($path));
+            $this->dataExternalReferences[$path] = $this->getDataExternalReferences($data, $path);
+        }
+
+        return $this->dataExternalReferences[$path];
     }
 
     private function externalReferencesExtractor(array $array): array
