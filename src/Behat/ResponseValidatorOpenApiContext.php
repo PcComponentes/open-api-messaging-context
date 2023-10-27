@@ -26,7 +26,7 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
         $path = \realpath($this->rootPath . '/' . $dumpPath);
         $this->checkSchemaFile($path);
 
-        $responseJson = $this->extractContent();
+        $responseJson = $this->extractResponseContent();
 
         $allSpec = $this->cacheAdapter->get(
             \md5($path),
@@ -52,6 +52,45 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
         }
     }
 
+    /** @Then the request should be valid according to OpenApi :dumpPath with path :openApiPath */
+    public function theRequestShouldBeValidAccordingToOpenApiWithPath(string $dumpPath, string $openApiPath): void
+    {
+        $path = \realpath($this->rootPath . '/' . $dumpPath);
+        $this->checkSchemaFile($path);
+
+        $method = \strtolower($this->extractMethod());
+        $contentType = $this->extractRequestContentType();
+
+        $requestJson = $this->extractRequestContent();
+
+        $allSpec = $this->cacheAdapter->get(
+            \md5($path),
+            function (ItemInterface $item) use ($path) {
+                $item->expiresAfter(null);
+
+                $allSpec = Yaml::parse(file_get_contents($path));
+
+                return $this->getDataExternalReferences($allSpec, $path);
+            },
+        );
+
+        $schemaSpec = (new OpenApiSchemaParser($allSpec))->fromRequestBody(
+            $openApiPath,
+            $method,
+            $contentType,
+        );
+
+        $validator = new JsonValidator(
+            $requestJson,
+            new JsonSchema(\json_decode(\json_encode($schemaSpec), false)),
+        );
+        $validation = $validator->validate();
+
+        if ($validation->hasError()) {
+            throw new JsonValidationException($validation->errorMessage());
+        }
+    }
+
     /** @Then the response should be valid according to OpenApi :dumpPath with path :openApiPath */
     public function theResponseShouldBeValidAccordingToOpenApiWithPath(string $dumpPath, string $openApiPath): void
     {
@@ -60,9 +99,9 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
 
         $statusCode = $this->extractStatusCode();
         $method = \strtolower($this->extractMethod());
-        $contentType = $this->contentType();
+        $contentType = $this->responseContentType();
 
-        $responseJson = $this->extractContent();
+        $responseJson = $this->extractResponseContent();
 
         $allSpec = $this->cacheAdapter->get(
             \md5($path),
@@ -93,21 +132,35 @@ abstract class ResponseValidatorOpenApiContext extends ValidatorApiContext imple
         }
     }
 
+    /** @Then the request and response should be valid according to OpenApi :dumpPath with path :openApiPath */
+    public function theRequestAndResponseShouldBeValidAccordingToOpenApiWithPath(
+        string $dumpPath,
+        string $openApiPath,
+    ): void {
+        $this->theRequestShouldBeValidAccordingToOpenApiWithPath($dumpPath, $openApiPath);
+
+        $this->theResponseShouldBeValidAccordingToOpenApiWithPath($dumpPath, $openApiPath);
+    }
+
     abstract protected function extractMethod(): string;
 
-    abstract protected function extractContentType(): ?string;
+    abstract protected function extractRequestContentType(): ?string;
+
+    abstract protected function extractResponseContentType(): ?string;
 
     abstract protected function extractStatusCode(): int;
 
-    abstract protected function extractContent(): string;
+    abstract protected function extractRequestContent(): string;
 
-    private function contentType(): string
+    abstract protected function extractResponseContent(): string;
+
+    private function responseContentType(): string
     {
         if (self::HTTP_NO_CONTENT_CODE === $this->extractStatusCode()) {
             return '';
         }
 
-        $contentType = $this->extractContentType();
+        $contentType = $this->extractResponseContentType();
 
         if (null === $contentType) {
             throw new \RuntimeException(

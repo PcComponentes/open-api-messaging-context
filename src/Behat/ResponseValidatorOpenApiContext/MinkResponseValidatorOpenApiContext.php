@@ -7,6 +7,9 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\MinkContext;
 use PcComponentes\OpenApiMessagingContext\Behat\ResponseValidatorOpenApiContext;
 
+/**
+ * @deprecated No longer used. Open an issue to let us know if you do, and kindly implement extractRequestContentType() and extractRequestContent()
+ */
 final class MinkResponseValidatorOpenApiContext extends ResponseValidatorOpenApiContext
 {
     private const CONTENT_TYPE_RESPONSE_HEADER_KEY = 'content-type';
@@ -26,7 +29,12 @@ final class MinkResponseValidatorOpenApiContext extends ResponseValidatorOpenApi
         return $requestClient->getHistory()->current()->getMethod();
     }
 
-    protected function extractContentType(): ?string
+    protected function extractRequestContentType(): ?string
+    {
+        throw new \LogicException('Not implemented');
+    }
+
+    protected function extractResponseContentType(): ?string
     {
         return $this->minkContext->getSession()->getResponseHeader(self::CONTENT_TYPE_RESPONSE_HEADER_KEY);
     }
@@ -36,7 +44,12 @@ final class MinkResponseValidatorOpenApiContext extends ResponseValidatorOpenApi
         return $this->minkContext->getSession()->getStatusCode();
     }
 
-    protected function extractContent(): string
+    protected function extractRequestContent(): string
+    {
+        throw new \LogicException('Not implemented');
+    }
+
+    protected function extractResponseContent(): string
     {
         return $this->minkContext->getSession()->getPage()->getContent();
     }

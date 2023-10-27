@@ -21,7 +21,14 @@ final class RequestHistoryResponseValidatorOpenApiContext extends ResponseValida
         return $this->requestHistory->getLastRequest()->getMethod();
     }
 
-    protected function extractContentType(): ?string
+    protected function extractRequestContentType(): ?string
+    {
+        $request = $this->requestHistory->getLastRequest();
+
+        return $request->getMimeType($request->getContentType());
+    }
+
+    protected function extractResponseContentType(): ?string
     {
         return $this->requestHistory->getLastResponse()->headers->get(self::CONTENT_TYPE_RESPONSE_HEADER_KEY);
     }
@@ -31,7 +38,12 @@ final class RequestHistoryResponseValidatorOpenApiContext extends ResponseValida
         return $this->requestHistory->getLastResponse()->getStatusCode();
     }
 
-    protected function extractContent(): string
+    protected function extractRequestContent(): string
+    {
+        return $this->requestHistory->getLastRequest()->getContent();
+    }
+
+    protected function extractResponseContent(): string
     {
         return $this->requestHistory->getLastResponse()->getContent();
     }
