@@ -87,9 +87,17 @@ Configuration:
 ```
 
 ## ResponseValidatorOpenApiContext
+Check if http requests are documented in your openapi file:
+```gherkin
+Then the request should be valid according to OpenApi "docs/openapi.yml" with path "/your/openapi/path/"
+```
 Check if http responses are documented in your openapi file:
 ```gherkin
 Then the response should be valid according to OpenApi "docs/openapi.yml" with path "/your/openapi/path/"
+```
+Additionally, you can check both the request and response with:
+```gherkin
+Then the request and response should be valid according to OpenApi "docs/openapi.yml" with path "/your/openapi/path/"
 ```
 Configuration:
 ```yaml
