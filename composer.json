@@ -44,10 +44,5 @@
       "dealerdirect/phpcodesniffer-composer-installer": true
     },
     "sort-packages": true
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-feature/add-request-validation-using-openapi": "4.0-dev"
-    }
   }
 }
