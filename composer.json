@@ -47,7 +47,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "4.0-dev"
+      "dev-feature/add-request-validation-using-openapi": "4.0-dev"
     }
   }
 }
