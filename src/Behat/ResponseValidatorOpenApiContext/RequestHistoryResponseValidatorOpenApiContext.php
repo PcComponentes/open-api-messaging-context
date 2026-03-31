@@ -25,7 +25,7 @@ final class RequestHistoryResponseValidatorOpenApiContext extends ResponseValida
     {
         $request = $this->requestHistory->getLastRequest();
 
-        return $request->getMimeType($request->getContentType());
+        return (new RequestContentTypeResolver())->resolve($request);
     }
 
     protected function extractResponseContentType(): ?string
